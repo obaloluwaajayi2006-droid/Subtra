@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics - Subtra</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="../dashboard/style.css" />
+</head>
+
+<body>
+
+  <!-- Toasts -->
+  <div id="toastContainer" class="position-fixed top-0 end-0 p-4" style="z-index: 1080;"></div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h5 class="logo-text">
+        <i class="fas fa-check-circle me-2"></i>Subtra
+      </h5>
+      <button class="btn-close btn-close-white d-lg-none" id="sidebarClose"></button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <p class="nav-label">MAIN MENU</p>
+        <a href="../dashboard/index.html" class="nav-link" data-section="dashboard">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="./index.html" class="nav-link active" data-section="analytics">
+          <i class="fas fa-chart-line"></i>
+          <span>Analytics</span>
+          <span class="badge bg-success ms-auto">New</span>
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <p class="nav-label">MANAGE</p>
+        <a href="../subscriptions/index.html" class="nav-link" data-section="subscriptions">
+          <i class="fas fa-refresh"></i>
+          <span>Subscription</span>
+          <span class="badge bg-secondary ms-auto" id="subCount">0</span>
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <p class="nav-label">ACCOUNT</p>
+        <a href="../profile/index.html" class="nav-link" id="profileLink">
+          <i class="fas fa-user"></i>
+          <span>Profile</span>
+        </a>
+        <a href="../settings/index.html" class="nav-link" id="settingsLink">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </div>
+
+      <div class="nav-section mt-auto">
+        <a href="#" class="nav-link" id="logoutLink">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Log out</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <button class="btn-hamburger d-lg-none" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <div class="top-bar-right">
+        <button class="btn-icon" id="helpBtn" title="Help">
+          <i class="fas fa-question-circle"></i>
+        </button>
+        <button class="btn-icon" id="notificationBtn" title="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge" id="notificationBadge">3</span>
+        </button>
+        <div class="user-profile">
+          <a href="../profile/index.html" class="avatar" id="userAvatar">S</a>
+          <div class="dropdown">
+            <button class="btn-profile" id="profileBtn">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-menu" id="profileDropdown">
+              <a href="../profile/index.html">Profile</a>
+              <a href="../settings/index.html">Settings</a>
+              <a href="#" id="logoutDropdown">Logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <!-- Welcome Section -->
+      <div class="welcome-section mb-4">
+        <div>
+          <h1 class="welcome-title">Analytics & Insights</h1>
+          <p class="welcome-subtitle">Deep dive into your subscription spending patterns and trends.</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="metric-card">
+            <div class="metric-icon yearly">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="metric-content">
+              <p class="metric-label">Total Active</p>
+              <h2 class="metric-value" id="totalActive">0</h2>
+              <p class="metric-change">subscriptions</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="metric-card">
+            <div class="metric-icon savings">
+              <i class="fas fa-pause-circle"></i>
+            </div>
+            <div class="metric-content">
+              <p class="metric-label">Paused</p>
+              <h2 class="metric-value" id="totalPaused">0</h2>
+              <p class="metric-change">saving monthly</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="metric-card">
+            <div class="metric-icon monthly">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="metric-content">
+              <p class="metric-label">Avg. Renewal Cost</p>
+              <h2 class="metric-value" id="avgCost">₦0</h2>
+              <p class="metric-change">per subscription</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="metric-card">
+            <div class="metric-icon yearly">
+              <i class="fas fa-wallet"></i>
+            </div>
+            <div class="metric-content">
+              <p class="metric-label">Yearly Savings</p>
+              <h2 class="metric-value" id="yearlySavings">₦0</h2>
+              <p class="metric-change">if paused resumed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="card dashboard-card">
+            <div class="card-header-custom">
+              <h6 class="card-title">
+                <i class="fas fa-pie-chart"></i> Spending by Category
+              </h6>
+            </div>
+            <div class="card-body">
+              <div style="position: relative; height: 300px;">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card dashboard-card">
+            <div class="card-header-custom">
+              <h6 class="card-title">
+                <i class="fas fa-dollar-sign"></i> Monthly Trend
+              </h6>
+            </div>
+            <div class="card-body">
+              <div style="position: relative; height: 300px;">
+                <canvas id="trendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Details Table -->
+      <div class="card dashboard-card">
+        <div class="card-header-custom">
+          <h6 class="card-title">
+            <i class="fas fa-list"></i> Category Details
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                  <th>Monthly Cost</th>
+                  <th>Yearly Cost</th>
+                  <th>% of Total</th>
+                </tr>
+              </thead>
+              <tbody id="categoryTable">
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-4">No data available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>

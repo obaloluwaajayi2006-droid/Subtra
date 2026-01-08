@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subtra - Subscription Tracker Made Easy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-dark: #0f0f1e;
+      --secondary-dark: #1a1a2e;
+      --accent-purple: #8b5cf6;
+      --accent-purple-light: #a78bfa;
+      --text-light: #e4e4e7;
+      --text-muted: #a1a1aa;
+      --border-color: #27272a;
+      --green-accent: #10b981;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 50%, #0f0f1e 100%);
+      color: var(--text-light);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background animated elements */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(139, 92, 246, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 0% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -50%;
+      right: -10%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: floatGradient 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes floatGradient {
+
+      0%,
+      100% {
+        transform: translate(0, 0);
+      }
+
+      50% {
+        transform: translate(100px, -100px);
+      }
+    }
+
+    /* Navigation */
+    .navbar {
+      background: linear-gradient(180deg, rgba(15, 15, 30, 0.95) 0%, rgba(15, 15, 30, 0.85) 100%);
+      backdrop-filter: blur(30px);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+      position: relative;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.1);
+    }
+
+    .navbar-brand {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--text-light);
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-link {
+      color: var(--text-muted) !important;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem !important;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-link:hover {
+      color: var(--accent-purple) !important;
+    }
+
+    .nav-link:hover::after {
+      width: 30px;
+    }
+
+    .nav-link.active {
+      color: var(--accent-purple) !important;
+    }
+
+    .nav-link.active::after {
+      width: 30px;
+    }
+
+    .btn-login {
+      color: var(--text-light);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      transition: all 0.3s ease;
+      background: transparent;
+      font-weight: 500;
+      border-radius: 25px;
+      padding: 8px 24px !important;
+    }
+
+    .btn-login:hover {
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--accent-purple);
+      border-color: var(--accent-purple);
+    }
+
+    .btn-signup {
+      background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+      color: white;
+      border: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+      border-radius: 25px;
+      padding: 8px 28px !important;
+    }
+
+    .btn-signup:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 40px rgba(139, 92, 246, 0.6);
+      color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 0 80px 0;
+      overflow: hidden;
+      background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.05) 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.3) 50%, rgba(139, 92, 246, 0.1) 100%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(139, 92, 246, 0.25);
+      border: 1px solid rgba(139, 92, 246, 0.5);
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 25px;
+      animation: slideInDown 0.8s ease;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.1);
+    }
+
+    .hero-title {
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 25px;
+      background: linear-gradient(135deg, #ffffff 0%, #e4e4e7 50%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: slideInUp 1s ease 0.2s both;
+      letter-spacing: -1px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+      animation: slideInUp 1s ease 0.3s both;
+      font-weight: 400;
+    }
+
+    .hero-description {
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 550px;
+      margin-bottom: 45px;
+      line-height: 1.8;
+      animation: slideInUp 1s ease 0.4s both;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 70px;
+      margin-bottom: 50px;
+      animation: slideInUp 1s ease 0.5s both;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 8px;
+    }
+
+    .hero-buttons {
+      animation: slideInUp 1s ease 0.6s both;
+    }
+
+    .btn-primary-custom {
+      background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+      color: white;
+      border: none;
+      padding: 16px 48px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary-custom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: left 0.5s ease;
+    }
+
+    .btn-primary-custom:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 48px rgba(139, 92, 246, 0.6);
+      color: white;
+    }
+
+    .btn-primary-custom:hover::before {
+      left: 100%;
+    }
+
+    .btn-secondary-custom {
+      background: transparent;
+      color: var(--text-light);
+      border: 2px solid rgba(139, 92, 246, 0.5);
+      padding: 14px 46px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      margin-left: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary-custom:hover {
+      border-color: #a78bfa;
+      background: rgba(139, 92, 246, 0.15);
+      color: #a78bfa;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
+    }
+
+    .hero-image {
+      position: relative;
+      animation: floatImage 3s ease-in-out infinite;
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatImage {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-30px);
+      }
+    }
+
+    /* Features Section */
+    .features {
+      position: relative;
+      z-index: 1;
+      padding: 120px 0;
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.03) 0%, transparent 100%);
+    }
+
+    .features h2 {
+      background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 35px;
+      margin-top: 60px;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(26, 26, 46, 0.3) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 16px;
+      padding: 35px;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.2), transparent);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(139, 92, 246, 0.6);
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(26, 26, 46, 0.6) 100%);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(139, 92, 246, 0.1));
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+      border-color: #a78bfa;
+      transform: scale(1.1);
+    }
+
+    .feature-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--text-light);
+    }
+
+    .feature-description {
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* Dashboard Preview Section */
+    .dashboard-preview {
+      position: relative;
+      z-index: 1;
+      padding: 120px 0;
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+    }
+
+    .dashboard-preview h2 {
+      background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .preview-container {
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(26, 26, 46, 0.3) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 24px;
+      padding: 50px;
+      margin-top: 50px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.1);
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    .chart-box {
+      background: linear-gradient(135deg, rgba(15, 15, 30, 0.7), rgba(15, 15, 30, 0.4));
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 14px;
+      padding: 28px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .chart-box:hover {
+      border-color: rgba(139, 92, 246, 0.6);
+      transform: translateY(-5px);
+      background: linear-gradient(135deg, rgba(15, 15, 30, 0.9), rgba(15, 15, 30, 0.6));
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
+    }
+
+    .chart-title {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .chart-value {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 18px;
+    }
+
+    .chart-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(139, 92, 246, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .chart-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+      border-radius: 3px;
+      animation: fillBar 1.5s ease forwards;
+    }
+
+    @keyframes fillBar {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: var(--fill-percent);
+      }
+    }
+
+    .chart-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Testimonials Section */
+    .testimonials {
+      position: relative;
+      z-index: 1;
+      padding: 120px 0;
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.05) 100%);
+    }
+
+    .testimonials h2 {
+      background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 35px;
+      margin-top: 60px;
+    }
+
+    .testimonial-card {
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(26, 26, 46, 0.3) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 16px;
+      padding: 35px;
+      transition: all 0.4s ease;
+      position: relative;
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 15px;
+      left: 25px;
+      font-size: 4rem;
+      color: rgba(139, 92, 246, 0.25);
+    }
+
+    .testimonial-card:hover {
+      border-color: rgba(139, 92, 246, 0.6);
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(26, 26, 46, 0.6) 100%);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+    }
+
+    .testimonial-text {
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.8;
+      margin-bottom: 25px;
+      font-style: italic;
+      font-size: 0.95rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .author-info h4 {
+      color: var(--text-light);
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .author-info p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    .rating {
+      color: #fbbf24;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    /* Pricing Section */
+    .pricing {
+      position: relative;
+      z-index: 1;
+      padding: 120px 0;
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.05) 0%, transparent 100%);
+    }
+
+    .pricing h2 {
+      background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 35px;
+      margin-top: 60px;
+    }
+
+    .pricing-card {
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(26, 26, 46, 0.3) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 16px;
+      padding: 45px 35px;
+      transition: all 0.4s ease;
+      position: relative;
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .pricing-card.featured {
+      border-color: rgba(139, 92, 246, 0.6);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.05) 100%);
+      transform: scale(1.08);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+    }
+
+    .pricing-card:hover {
+      border-color: rgba(139, 92, 246, 0.6);
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(26, 26, 46, 0.6) 100%);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+    }
+
+    .pricing-card.featured:hover {
+      transform: scale(1.08) translateY(-8px);
+    }
+
+    .pricing-badge {
+      display: inline-block;
+      background: var(--accent-purple);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .pricing-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .pricing-price {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent-purple);
+      margin-bottom: 5px;
+    }
+
+    .pricing-period {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 30px;
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 30px;
+    }
+
+    .pricing-features li {
+      color: var(--text-muted);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+    }
+
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--green-accent);
+      font-weight: 900;
+      margin-right: 10px;
+      font-size: 1.1rem;
+    }
+
+    .pricing-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .pricing-btn-primary {
+      background: linear-gradient(135deg, var(--accent-purple) 0%, #a78bfa 100%);
+      color: white;
+      border: none;
+    }
+
+    .pricing-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .pricing-btn-secondary {
+      background: transparent;
+      color: var(--accent-purple);
+      border: 1px solid var(--accent-purple);
+    }
+
+    .pricing-btn-secondary:hover {
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    /* CTA Section */
+    .cta {
+      position: relative;
+      z-index: 1;
+      padding: 100px 0;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    .footer {
+      position: relative;
+      z-index: 1;
+      padding: 50px 0;
+      border-top: 1px solid var(--border-color);
+      background: rgba(15, 15, 30, 0.5);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-section h4 {
+      color: var(--text-light);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section li {
+      margin-bottom: 10px;
+    }
+
+    .footer-section a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--accent-purple);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-color);
+      padding-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-bottom p {
+      color: var(--text-muted);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-stats {
+        gap: 30px;
+      }
+
+      .stat-number {
+        font-size: 1.8rem;
+      }
+
+      .btn-secondary-custom {
+        margin-left: 0;
+        margin-top: 15px;
+        width: 100%;
+      }
+
+      .cta-title {
+        font-size: 2rem;
+      }
+
+      .pricing-card.featured {
+        transform: scale(1);
+      }
+
+      .navbar {
+        padding: 1rem;
+      }
+
+      .navbar-brand {
+        font-size: 1.4rem;
+      }
+
+      .hero-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 40px 0;
+      }
+
+      .hero-title {
+        font-size: 1.8rem;
+      }
+
+      .hero-description {
+        font-size: 0.95rem;
+      }
+
+      .btn-primary-custom,
+      .btn-secondary-custom {
+        padding: 12px 30px;
+        font-size: 1rem;
+      }
+
+      .features-grid,
+      .testimonials-grid,
+      .pricing-cards,
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Scroll animations */
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Curved divider */
+    .curve-divider {
+      position: relative;
+      margin-top: 80px;
+      margin-bottom: 80px;
+    }
+
+    .curve-divider::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 150px;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1200 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z' fill='%231a1a2e' stroke='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: top;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-lg">
+      <a class="navbar-brand" href="#">Subtra</a>
+      <button class="navbar-toggler bg-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#features">Features</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+              More
+            </a>
+            <ul class="dropdown-menu" style="background: var(--secondary-dark); border-color: var(--border-color);">
+              <li><a class="dropdown-item" href="#" style="color: var(--text-muted);">Dashboard</a></li>
+              <li><a class="dropdown-item" href="#" style="color: var(--text-muted);">Analytics</a></li>
+              <li><a class="dropdown-item" href="#" style="color: var(--text-muted);">Alerts</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#testimonials">Testimonials</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#pricing">Pricing</a>
+          </li>
+        </ul>
+        <button class="btn btn-login ms-3">Log In</button>
+        <a href="./signup/index.html"><button class="btn btn-signup ms-2">Sign Up</button></a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="container-lg">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="hero-badge">
+            <i class="fas fa-star"></i> New - Experience the future of subscription management
+          </div>
+          <h1 class="hero-title">
+            Subscription<br>Management<br><span style="color: var(--accent-purple);">Made Simple.</span>
+          </h1>
+          <p class="hero-subtitle">Designed for Your Life.</p>
+          <p class="hero-description">
+            Take control of your subscriptions. Track spending, get renewal reminders, and optimize your recurring
+            payments all in one beautiful, intuitive platform.
+          </p>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-number">4.9+</div>
+              <div class="stat-label">Stars rating</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">20k+</div>
+              <div class="stat-label">Satisfied users</div>
+            </div>
+          </div>
+          <div class="hero-buttons">
+            <a href="./signup/index.html"><button class="btn-primary-custom">Get Started Free</button></a>
+            <button class="btn-secondary-custom">Watch Demo</button>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image">
+            <div
+              style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1)); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; text-align: center; min-height: 400px; display: flex; align-items: center; justify-content: center;">
+              <div>
+                <i class="fas fa-mobile" style="font-size: 80px; color: var(--accent-purple); opacity: 0.5;"></i>
+                <p style="margin-top: 20px; color: var(--text-muted);">Dashboard Preview</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Curve Divider -->
+      <div class="curve-divider"></div>
+
+      <!-- Features Showcase -->
+      <div style="text-align: center; margin-bottom: 40px;">
+        <p
+          style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 20px;">
+          KEY BENEFITS</p>
+        <div style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap;">
+          <div>
+            <h4 style="color: var(--text-light);">💳 Smart Tracking</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Monitor all subscriptions in one place</p>
+          </div>
+          <div>
+            <h4 style="color: var(--text-light);">🔔 Renewal Alerts</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Never miss a payment deadline</p>
+          </div>
+          <div>
+            <h4 style="color: var(--text-light);">📊 Analytics</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Deep insights into your spending</p>
+          </div>
+          <div>
+            <h4 style="color: var(--text-light);">🔐 Secure</h4>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Enterprise-grade security</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container-lg">
+      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Powerful Features</h2>
+      <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Everything you need to manage your
+        subscriptions effortlessly and intelligently</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="feature-title">Real-time Analytics</h3>
+          <p class="feature-description">Get comprehensive insights into your spending patterns with detailed charts and
+            reports</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-bell"></i>
+          </div>
+          <h3 class="feature-title">Smart Notifications</h3>
+          <p class="feature-description">Receive timely reminders 7 days before renewals and custom alerts</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3 class="feature-title">Mobile First</h3>
+          <p class="feature-description">Manage subscriptions on the go with our responsive design</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3 class="feature-title">Secure & Private</h3>
+          <p class="feature-description">Military-grade encryption keeps your financial data safe</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-sync"></i>
+          </div>
+          <h3 class="feature-title">Auto Sync</h3>
+          <p class="feature-description">Automatically update your subscriptions across all devices</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-download"></i>
+          </div>
+          <h3 class="feature-title">Export Reports</h3>
+          <p class="feature-description">Download detailed reports in multiple formats for records</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Preview -->
+  <section class="dashboard-preview">
+    <div class="container-lg">
+      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">See Your Data Live</h2>
+      <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Visualize your subscription spending
+        with beautiful, interactive charts</p>
+
+      <div class="preview-container">
+        <div class="chart-grid">
+          <div class="chart-box">
+            <div class="chart-title">Total Monthly Spending</div>
+            <div class="chart-value">$247.80</div>
+            <div class="chart-bar">
+              <div class="chart-bar-fill" style="--fill-percent: 68%;"></div>
+            </div>
+            <div class="chart-label">↑ 12% from last month</div>
+          </div>
+
+          <div class="chart-box">
+            <div class="chart-title">Active Subscriptions</div>
+            <div class="chart-value">24</div>
+            <div class="chart-bar">
+              <div class="chart-bar-fill" style="--fill-percent: 85%;"></div>
+            </div>
+            <div class="chart-label">Across 8 categories</div>
+          </div>
+
+          <div class="chart-box">
+            <div class="chart-title">Upcoming Renewals</div>
+            <div class="chart-value">7</div>
+            <div class="chart-bar">
+              <div class="chart-bar-fill" style="--fill-percent: 45%;"></div>
+            </div>
+            <div class="chart-label">Next 30 days</div>
+          </div>
+
+          <div class="chart-box">
+            <div class="chart-title">Money Saved</div>
+            <div class="chart-value">$1,240</div>
+            <div class="chart-bar">
+              <div class="chart-bar-fill" style="--fill-percent: 92%;"></div>
+            </div>
+            <div class="chart-label">By canceling unused services</div>
+          </div>
+        </div>
+
+        <div
+          style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.6), rgba(26, 26, 46, 0.3)); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 14px; padding: 35px; margin-top: 40px; backdrop-filter: blur(10px);">
+          <h4 style="color: var(--text-light); margin-bottom: 25px; font-size: 1.2rem; font-weight: 700;">Subscription
+            Categories Breakdown</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
+            <div style="text-align: center;">
+              <div
+                style="width: 110px; height: 110px; margin: 0 auto 15px; background: conic-gradient(#8b5cf6 0deg 90deg, rgba(139, 92, 246, 0.2) 90deg); border-radius: 50%; position: relative;">
+                <div
+                  style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: linear-gradient(135deg, rgba(15, 15, 30, 0.8), rgba(15, 15, 30, 0.6)); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(139, 92, 246, 0.3);">
+                  <span style="color: #a78bfa; font-weight: 900; font-size: 1.3rem;">35%</span>
+                </div>
+              </div>
+              <p style="color: rgba(255, 255, 255, 0.75); font-weight: 500;">Entertainment</p>
+            </div>
+            <div style="text-align: center;">
+              <div
+                style="width: 110px; height: 110px; margin: 0 auto 15px; background: conic-gradient(#a78bfa 0deg 60deg, rgba(139, 92, 246, 0.2) 60deg); border-radius: 50%; position: relative;">
+                <div
+                  style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: linear-gradient(135deg, rgba(15, 15, 30, 0.8), rgba(15, 15, 30, 0.6)); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(139, 92, 246, 0.3);">
+                  <span style="color: #a78bfa; font-weight: 900; font-size: 1.3rem;">25%</span>
+                </div>
+              </div>
+              <p style="color: rgba(255, 255, 255, 0.75); font-weight: 500;">Productivity</p>
+            </div>
+            <div style="text-align: center;">
+              <div
+                style="width: 110px; height: 110px; margin: 0 auto 15px; background: conic-gradient(#10b981 0deg 40deg, rgba(139, 92, 246, 0.2) 40deg); border-radius: 50%; position: relative;">
+                <div
+                  style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: linear-gradient(135deg, rgba(15, 15, 30, 0.8), rgba(15, 15, 30, 0.6)); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(139, 92, 246, 0.3);">
+                  <span style="color: #10b981; font-weight: 900; font-size: 1.3rem;">15%</span>
+                </div>
+              </div>
+              <p style="color: rgba(255, 255, 255, 0.75); font-weight: 500;">Fitness</p>
+            </div>
+            <div style="text-align: center;">
+              <div
+                style="width: 110px; height: 110px; margin: 0 auto 15px; background: conic-gradient(#ec4899 0deg 30deg, rgba(139, 92, 246, 0.2) 30deg); border-radius: 50%; position: relative;">
+                <div
+                  style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: linear-gradient(135deg, rgba(15, 15, 30, 0.8), rgba(15, 15, 30, 0.6)); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(139, 92, 246, 0.3);">
+                  <span style="color: #ec4899; font-weight: 900; font-size: 1.3rem;">25%</span>
+                </div>
+              </div>
+              <p style="color: rgba(255, 255, 255, 0.75); font-weight: 500;">Other</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials" id="testimonials">
+    <div class="container-lg">
+      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Loved by Users</h2>
+      <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Join thousands of happy users managing
+        their subscriptions with Subtra</p>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">
+            "Subtra has completely changed how I manage my subscriptions. I've saved over $200 a month just by
+            identifying unused services!"
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">JM</div>
+            <div class="author-info">
+              <h4>James Miller</h4>
+              <p>Tech Entrepreneur</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">
+            "The renewal reminders are a lifesaver! I never forget to cancel unwanted services before the next billing
+            cycle."
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">SJ</div>
+            <div class="author-info">
+              <h4>Sarah Johnson</h4>
+              <p>Marketing Manager</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">
+            "The analytics dashboard is beautifully designed. I can see exactly where my money goes every month.
+            Absolutely worth it!"
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">MK</div>
+            <div class="author-info">
+              <h4>Michael Khan</h4>
+              <p>Freelance Designer</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">
+            "Best app I've used for subscription management. The UI is intuitive and the sync across devices works
+            flawlessly."
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">EP</div>
+            <div class="author-info">
+              <h4>Emily Parker</h4>
+              <p>Student</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">
+            "I recommended Subtra to all my friends. It's simple, elegant, and genuinely helpful. Worth every penny!"
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">DC</div>
+            <div class="author-info">
+              <h4>David Chen</h4>
+              <p>Software Developer</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-text">
+            "The customer support is fantastic. They helped me set up my account in minutes. Highly recommend Subtra!"
+          </p>
+          <div class="testimonial-author">
+            <div class="author-avatar">AR</div>
+            <div class="author-info">
+              <h4>Amanda Rodriguez</h4>
+              <p>Business Owner</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing" id="pricing">
+    <div class="container-lg">
+      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Simple, Transparent Pricing</h2>
+      <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Choose the plan that fits your needs.
+        All plans include a 14-day free trial.</p>
+
+      <div class="pricing-cards">
+        <div class="pricing-card">
+          <div class="pricing-name">Starter</div>
+          <div class="pricing-price">Free</div>
+          <div class="pricing-period">Forever free tier</div>
+          <ul class="pricing-features">
+            <li>Up to 10 subscriptions</li>
+            <li>Basic analytics</li>
+            <li>Email reminders</li>
+            <li>Mobile app access</li>
+          </ul>
+          <button class="pricing-btn pricing-btn-secondary">Get Started</button>
+        </div>
+
+        <div class="pricing-card featured">
+          <div class="pricing-badge">MOST POPULAR</div>
+          <div class="pricing-name">Pro</div>
+          <div class="pricing-price">$9.99</div>
+          <div class="pricing-period">per month</div>
+          <ul class="pricing-features">
+            <li>Unlimited subscriptions</li>
+            <li>Advanced analytics</li>
+            <li>Smart notifications</li>
+            <li>CSV export</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="pricing-btn pricing-btn-primary">Start Free Trial</button>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-name">Business</div>
+          <div class="pricing-price">$24.99</div>
+          <div class="pricing-period">per month</div>
+          <ul class="pricing-features">
+            <li>Everything in Pro</li>
+            <li>Team management</li>
+            <li>Advanced reports</li>
+            <li>API access</li>
+            <li>24/7 support</li>
+          </ul>
+          <button class="pricing-btn pricing-btn-secondary">Start Free Trial</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container-lg">
+      <h2 class="cta-title">Ready to Take Control?</h2>
+      <p class="cta-description">Start managing your subscriptions smarter today. No credit card required for the 14-day
+        free trial.</p>
+      <a href="./signup/index.html"><button class="btn-primary-custom"
+          style="font-size: 1.2rem; padding: 16px 48px;">Get Started Free</button></a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container-lg">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Subtra</h4>
+          <p style="color: var(--text-muted);">The smartest way to manage your subscriptions.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Updates</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Subtra. All rights reserved.</p>
+        <p>Crafted with <i class="fas fa-heart" style="color: var(--accent-purple);"></i> for subscription lovers</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Intersection Observer for fade-in animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.feature-card, .testimonial-card, .pricing-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'all 0.6s ease';
+      observer.observe(el);
+    });
+
+    // Active nav link on scroll
+    window.addEventListener('scroll', () => {
+      let current = '';
+      const sections = document.querySelectorAll('section');
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (scrollY >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

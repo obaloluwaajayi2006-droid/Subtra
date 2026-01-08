@@ -1,0 +1,4 @@
+# Firebase service account keys
+functions/*.json
+*.json
+
