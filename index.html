@@ -7,6 +7,8 @@
   <title>Subtra - Subscription Tracker Made Easy</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -28,7 +30,7 @@
     body {
       background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 50%, #0f0f1e 100%);
       color: var(--text-light);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Outfit', sans-serif;
       overflow-x: hidden;
       position: relative;
     }
@@ -167,6 +169,166 @@
       color: white;
     }
 
+    /* Sidebar Navigation */
+    .navbar-toggler {
+      border: none !important;
+      padding: 0.25rem 0.5rem !important;
+    }
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(164, 139, 250, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: -320px;
+      top: 0;
+      width: 320px;
+      height: 100vh;
+      background: linear-gradient(180deg, rgba(15, 15, 30, 0.98) 0%, rgba(26, 26, 46, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(139, 92, 246, 0.2);
+      padding: 80px 0 0 0;
+      overflow-y: auto;
+      z-index: 99;
+      transition: left 0.3s ease;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: none;
+      z-index: 101;
+    }
+
+    .sidebar-close:hover {
+      color: var(--accent-purple);
+      transform: rotate(90deg);
+    }
+
+    @media (max-width: 992px) {
+      .sidebar-close {
+        display: block;
+      }
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-nav li {
+      border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 18px 30px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .sidebar-nav a:hover {
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--accent-purple);
+      padding-left: 40px;
+    }
+
+    .sidebar-nav a.active {
+      background: rgba(139, 92, 246, 0.15);
+      color: var(--accent-purple);
+      border-left: 3px solid var(--accent-purple);
+      padding-left: 27px;
+    }
+
+    .sidebar-buttons {
+      padding: 30px 20px;
+      border-top: 1px solid rgba(139, 92, 246, 0.1);
+      margin-top: 30px;
+    }
+
+    .sidebar-buttons .btn {
+      width: 100%;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      padding: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-buttons .btn-login {
+      background: transparent;
+      color: var(--text-light);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      margin-bottom: 12px;
+    }
+
+    .sidebar-buttons .btn-login:hover {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+    }
+
+    .sidebar-buttons .btn-signup {
+      background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+      color: white;
+      border: none;
+    }
+
+    .sidebar-buttons .btn-signup:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0);
+      z-index: 98;
+      transition: background 0.3s ease;
+      pointer-events: none;
+    }
+
+    .sidebar-overlay.active {
+      background: rgba(0, 0, 0, 0.5);
+      pointer-events: auto;
+    }
+
+    @media (max-width: 992px) {
+      .navbar-collapse {
+        display: none !important;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .sidebar {
+        display: none !important;
+      }
+
+      .sidebar-overlay {
+        display: none !important;
+      }
+    }
+
     /* Hero Section */
     .hero {
       position: relative;
@@ -194,15 +356,16 @@
 
     .hero-badge {
       display: inline-block;
-      background: rgba(139, 92, 246, 0.25);
-      border: 1px solid rgba(139, 92, 246, 0.5);
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.4);
       border-radius: 50px;
       padding: 10px 20px;
       font-size: 0.85rem;
       font-weight: 600;
       margin-bottom: 25px;
       animation: slideInDown 0.8s ease;
-      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.1);
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+      backdrop-filter: blur(10px);
     }
 
     .hero-title {
@@ -269,8 +432,8 @@
       background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
       color: white;
       border: none;
-      padding: 16px 48px;
-      font-size: 1.05rem;
+      padding: 14px 32px;
+      font-size: 0.95rem;
       font-weight: 700;
       border-radius: 50px;
       transition: all 0.3s ease;
@@ -305,13 +468,13 @@
       background: transparent;
       color: var(--text-light);
       border: 2px solid rgba(139, 92, 246, 0.5);
-      padding: 14px 46px;
-      font-size: 1.05rem;
+      padding: 12px 30px;
+      font-size: 0.95rem;
       font-weight: 700;
       border-radius: 50px;
       transition: all 0.3s ease;
       cursor: pointer;
-      margin-left: 20px;
+      margin-left: 15px;
       backdrop-filter: blur(10px);
     }
 
@@ -387,15 +550,16 @@
     }
 
     .feature-card {
-      background: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(26, 26, 46, 0.3) 100%);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.03));
       border: 1px solid rgba(139, 92, 246, 0.2);
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 35px;
       transition: all 0.4s ease;
       cursor: pointer;
       position: relative;
       overflow: hidden;
       backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.08);
     }
 
     .feature-card::before {
@@ -412,10 +576,10 @@
     }
 
     .feature-card:hover {
-      border-color: rgba(139, 92, 246, 0.6);
-      background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(26, 26, 46, 0.6) 100%);
+      border-color: rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.05));
       transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
     }
 
     .feature-card:hover::before {
@@ -472,14 +636,14 @@
     }
 
     .preview-container {
-      background: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(26, 26, 46, 0.3) 100%);
-      border: 1px solid rgba(139, 92, 246, 0.2);
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.4) 0%, rgba(26, 26, 46, 0.2) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.25);
       border-radius: 24px;
       padding: 50px;
       margin-top: 50px;
       overflow: hidden;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.1);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.12);
     }
 
     .chart-grid {
@@ -490,12 +654,13 @@
     }
 
     .chart-box {
-      background: linear-gradient(135deg, rgba(15, 15, 30, 0.7), rgba(15, 15, 30, 0.4));
+      background: linear-gradient(135deg, rgba(15, 15, 30, 0.5), rgba(15, 15, 30, 0.2));
       border: 1px solid rgba(139, 92, 246, 0.25);
       border-radius: 14px;
       padding: 28px;
       transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.08);
     }
 
     .chart-box:hover {
@@ -579,14 +744,15 @@
     }
 
     .testimonial-card {
-      background: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(26, 26, 46, 0.3) 100%);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.03));
       border: 1px solid rgba(139, 92, 246, 0.2);
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 35px;
       transition: all 0.4s ease;
       position: relative;
       backdrop-filter: blur(10px);
       overflow: hidden;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.08);
     }
 
     .testimonial-card::before {
@@ -595,14 +761,14 @@
       top: 15px;
       left: 25px;
       font-size: 4rem;
-      color: rgba(139, 92, 246, 0.25);
+      color: rgba(139, 92, 246, 0.15);
     }
 
     .testimonial-card:hover {
-      border-color: rgba(139, 92, 246, 0.6);
-      background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(26, 26, 46, 0.6) 100%);
+      border-color: rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.05));
       transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
     }
 
     .testimonial-text {
@@ -674,28 +840,29 @@
     }
 
     .pricing-card {
-      background: linear-gradient(135deg, rgba(26, 26, 46, 0.6) 0%, rgba(26, 26, 46, 0.3) 100%);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.03));
       border: 1px solid rgba(139, 92, 246, 0.2);
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 45px 35px;
       transition: all 0.4s ease;
       position: relative;
       backdrop-filter: blur(10px);
       overflow: hidden;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.08);
     }
 
     .pricing-card.featured {
-      border-color: rgba(139, 92, 246, 0.6);
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.05) 100%);
+      border-color: rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
       transform: scale(1.08);
-      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
     }
 
     .pricing-card:hover {
-      border-color: rgba(139, 92, 246, 0.6);
-      background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(26, 26, 46, 0.6) 100%);
+      border-color: rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.05));
       transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+      box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
     }
 
     .pricing-card.featured:hover {
@@ -790,6 +957,7 @@
       padding: 100px 0;
       border-top: 1px solid var(--border-color);
       text-align: center;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(139, 92, 246, 0.03) 100%);
     }
 
     .cta-title {
@@ -817,7 +985,8 @@
       z-index: 1;
       padding: 50px 0;
       border-top: 1px solid var(--border-color);
-      background: rgba(15, 15, 30, 0.5);
+      background: linear-gradient(180deg, rgba(15, 15, 30, 0.6) 0%, rgba(15, 15, 30, 0.8) 100%);
+      backdrop-filter: blur(10px);
     }
 
     .footer-content {
@@ -889,13 +1058,32 @@
     }
 
     /* Responsive */
+    @media (max-width: 1024px) {
+      .hero {
+        padding: 60px 20px;
+      }
+
+      .container-lg {
+        padding: 0 20px;
+      }
+    }
+
     @media (max-width: 768px) {
+      .hero {
+        padding: 50px 20px;
+      }
+
+      .container-lg {
+        padding: 0 20px;
+      }
+
       .hero-title {
         font-size: 2.5rem;
       }
 
       .hero-stats {
-        gap: 30px;
+        gap: 40px;
+        flex-wrap: wrap;
       }
 
       .stat-number {
@@ -903,9 +1091,16 @@
       }
 
       .btn-secondary-custom {
-        margin-left: 0;
-        margin-top: 15px;
-        width: 100%;
+        margin-left: 10px;
+        margin-top: 0;
+        width: auto;
+      }
+
+      .hero-buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        flex-wrap: wrap;
       }
 
       .cta-title {
@@ -917,27 +1112,25 @@
       }
 
       .navbar {
-        padding: 1rem;
+        padding: 1rem 1.5rem;
       }
 
       .navbar-brand {
         font-size: 1.4rem;
       }
 
-      .hero-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .hero-stats {
-        flex-direction: column;
+      .hero-image {
+        margin-top: 30px;
       }
     }
 
     @media (max-width: 480px) {
       .hero {
-        padding: 40px 0;
+        padding: 40px 16px;
+      }
+
+      .container-lg {
+        padding: 0 16px;
       }
 
       .hero-title {
@@ -950,8 +1143,8 @@
 
       .btn-primary-custom,
       .btn-secondary-custom {
-        padding: 12px 30px;
-        font-size: 1rem;
+        padding: 12px 24px;
+        font-size: 0.95rem;
       }
 
       .features-grid,
@@ -963,6 +1156,14 @@
 
       .footer-content {
         grid-template-columns: 1fr;
+      }
+
+      .navbar {
+        padding: 0.8rem 1rem;
+      }
+
+      .benefits-card {
+        padding: 25px !important;
       }
     }
 
@@ -995,15 +1196,81 @@
       background-size: cover;
       background-position: top;
     }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(139, 92, 246, 0.2));
+      backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(167, 139, 250, 0.6);
+      color: #a78bfa;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+    }
+
+    .back-to-top:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(139, 92, 246, 0.4));
+      border-color: rgba(167, 139, 250, 1);
+      color: #ffffff;
+      box-shadow: 0 12px 48px rgba(139, 92, 246, 0.5);
+      transform: scale(1.1);
+    }
+
+    .back-to-top.show {
+      display: flex;
+    }
+
+    @media (max-width: 768px) {
+      .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-close" id="sidebarClose">
+      <i class="fas fa-times"></i>
+    </button>
+    <ul class="sidebar-nav">
+      <li><a href="#home" class="sidebar-link active">Home</a></li>
+      <li><a href="#features" class="sidebar-link">Features</a></li>
+      <li><a href="#dashboard" class="sidebar-link">Dashboard</a></li>
+      <li><a href="#analytics" class="sidebar-link">Analytics</a></li>
+      <li><a href="#testimonials" class="sidebar-link">Testimonials</a></li>
+      <li><a href="#pricing" class="sidebar-link">Pricing</a></li>
+    </ul>
+    <div class="sidebar-buttons">
+      <a href="./signin/index.html" style="text-decoration: none;"><button class="btn btn-login">Log In</button></a>
+      <a href="./signup/index.html" style="text-decoration: none;"><button class="btn btn-signup">Sign Up</button></a>
+    </div>
+  </aside>
+
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-lg">
       <a class="navbar-brand" href="#">Subtra</a>
-      <button class="navbar-toggler bg-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <button class="navbar-toggler" id="sidebarToggle" type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -1031,7 +1298,8 @@
             <a class="nav-link" href="#pricing">Pricing</a>
           </li>
         </ul>
-        <button class="btn btn-login ms-3">Log In</button>
+        <a href="./signin/index.html" style="text-decoration: none;"><button class="btn btn-login ms-3">Log
+            In</button></a>
         <a href="./signup/index.html"><button class="btn btn-signup ms-2">Sign Up</button></a>
       </div>
     </div>
@@ -1081,30 +1349,45 @@
         </div>
       </div>
 
-      <!-- Curve Divider -->
-      <div class="curve-divider"></div>
-
-      <!-- Features Showcase -->
-      <div style="text-align: center; margin-bottom: 40px;">
+      <!-- Key Benefits Card -->
+      <div class="benefits-card"
+        style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05)); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 20px; padding: 40px; margin-top: 60px; backdrop-filter: blur(10px);">
         <p
-          style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 20px;">
-          KEY BENEFITS</p>
-        <div style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap;">
-          <div>
-            <h4 style="color: var(--text-light);">💳 Smart Tracking</h4>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Monitor all subscriptions in one place</p>
+          style="color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; margin-bottom: 30px; text-align: center;">
+          KEY BENEFITS
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+          <div style="text-align: center;">
+            <div
+              style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(139, 92, 246, 0.1)); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #a78bfa; margin: 0 auto 15px;">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <h4 style="color: var(--text-light); font-size: 1.2rem; margin-bottom: 10px;">Smart Tracking</h4>
+            <p style="color: rgba(255, 255, 255, 0.65); font-size: 0.9rem;">Monitor all subscriptions in one place</p>
           </div>
-          <div>
-            <h4 style="color: var(--text-light);">🔔 Renewal Alerts</h4>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Never miss a payment deadline</p>
+          <div style="text-align: center;">
+            <div
+              style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(139, 92, 246, 0.1)); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #a78bfa; margin: 0 auto 15px;">
+              <i class="fas fa-bell"></i>
+            </div>
+            <h4 style="color: var(--text-light); font-size: 1.2rem; margin-bottom: 10px;">Renewal Alerts</h4>
+            <p style="color: rgba(255, 255, 255, 0.65); font-size: 0.9rem;">Never miss a payment deadline</p>
           </div>
-          <div>
-            <h4 style="color: var(--text-light);">📊 Analytics</h4>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Deep insights into your spending</p>
+          <div style="text-align: center;">
+            <div
+              style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(139, 92, 246, 0.1)); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #a78bfa; margin: 0 auto 15px;">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+            <h4 style="color: var(--text-light); font-size: 1.2rem; margin-bottom: 10px;">Analytics</h4>
+            <p style="color: rgba(255, 255, 255, 0.65); font-size: 0.9rem;">Deep insights into your spending</p>
           </div>
-          <div>
-            <h4 style="color: var(--text-light);">🔐 Secure</h4>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Enterprise-grade security</p>
+          <div style="text-align: center;">
+            <div
+              style="width: 50px; height: 50px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(139, 92, 246, 0.1)); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #a78bfa; margin: 0 auto 15px;">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4 style="color: var(--text-light); font-size: 1.2rem; margin-bottom: 10px;">Secure</h4>
+            <p style="color: rgba(255, 255, 255, 0.65); font-size: 0.9rem;">Enterprise-grade security</p>
           </div>
         </div>
       </div>
@@ -1114,9 +1397,12 @@
   <!-- Features Section -->
   <section class="features" id="features">
     <div class="container-lg">
-      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Powerful Features</h2>
-      <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Everything you need to manage your
-        subscriptions effortlessly and intelligently</p>
+      <div
+        style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.03)); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 20px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(10px);">
+        <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Powerful Features</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Everything you need to manage your
+          subscriptions effortlessly and intelligently</p>
+      </div>
 
       <div class="features-grid">
         <div class="feature-card">
@@ -1174,9 +1460,12 @@
   <!-- Dashboard Preview -->
   <section class="dashboard-preview">
     <div class="container-lg">
-      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">See Your Data Live</h2>
-      <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Visualize your subscription spending
-        with beautiful, interactive charts</p>
+      <div
+        style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.03)); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 20px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(10px);">
+        <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">See Your Data Live</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Visualize your subscription spending
+          with beautiful, interactive charts</p>
+      </div>
 
       <div class="preview-container">
         <div class="chart-grid">
@@ -1218,7 +1507,7 @@
         </div>
 
         <div
-          style="background: linear-gradient(135deg, rgba(26, 26, 46, 0.6), rgba(26, 26, 46, 0.3)); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 14px; padding: 35px; margin-top: 40px; backdrop-filter: blur(10px);">
+          style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.03)); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 20px; padding: 40px; margin-top: 40px; backdrop-filter: blur(10px);">
           <h4 style="color: var(--text-light); margin-bottom: 25px; font-size: 1.2rem; font-weight: 700;">Subscription
             Categories Breakdown</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
@@ -1271,9 +1560,12 @@
   <!-- Testimonials Section -->
   <section class="testimonials" id="testimonials">
     <div class="container-lg">
-      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Loved by Users</h2>
-      <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Join thousands of happy users managing
-        their subscriptions with Subtra</p>
+      <div
+        style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.03)); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 20px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(10px);">
+        <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Loved by Users</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Join thousands of happy users managing
+          their subscriptions with Subtra</p>
+      </div>
 
       <div class="testimonials-grid">
         <div class="testimonial-card">
@@ -1406,9 +1698,12 @@
   <!-- Pricing Section -->
   <section class="pricing" id="pricing">
     <div class="container-lg">
-      <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Simple, Transparent Pricing</h2>
-      <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Choose the plan that fits your needs.
-        All plans include a 14-day free trial.</p>
+      <div
+        style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.03)); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 20px; padding: 40px; margin-bottom: 60px; backdrop-filter: blur(10px);">
+        <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 15px;">Simple, Transparent Pricing</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px;">Choose the plan that fits your needs.
+          All plans include a 14-day free trial.</p>
+      </div>
 
       <div class="pricing-cards">
         <div class="pricing-card">
@@ -1421,7 +1716,8 @@
             <li>Email reminders</li>
             <li>Mobile app access</li>
           </ul>
-          <button class="pricing-btn pricing-btn-secondary">Get Started</button>
+          <a href="./signup/index.html" style="text-decoration: none;"><button
+              class="pricing-btn pricing-btn-secondary">Get Started</button></a>
         </div>
 
         <div class="pricing-card featured">
@@ -1436,7 +1732,8 @@
             <li>CSV export</li>
             <li>Priority support</li>
           </ul>
-          <button class="pricing-btn pricing-btn-primary">Start Free Trial</button>
+          <a href="./signup/index.html" style="text-decoration: none;"><button
+              class="pricing-btn pricing-btn-primary">Start Free Trial</button></a>
         </div>
 
         <div class="pricing-card">
@@ -1450,7 +1747,8 @@
             <li>API access</li>
             <li>24/7 support</li>
           </ul>
-          <button class="pricing-btn pricing-btn-secondary">Start Free Trial</button>
+          <a href="./signup/index.html" style="text-decoration: none;"><button
+              class="pricing-btn pricing-btn-secondary">Start Free Trial</button></a>
         </div>
       </div>
     </div>
@@ -1571,7 +1869,80 @@
         }
       });
     });
+
+    // Sidebar functionality
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarClose = document.getElementById('sidebarClose');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+    // Open sidebar
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.add('active');
+      sidebarOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Close sidebar
+    const closeSidebar = () => {
+      sidebar.classList.remove('active');
+      sidebarOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    };
+
+    sidebarClose.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+
+    // Close sidebar when clicking a link
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        closeSidebar();
+        // Update active link
+        sidebarLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    // Close sidebar on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+        closeSidebar();
+      }
+    });
+
+    // Back to top button functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTopBtn = document.getElementById('backToTop');
+      console.log('Back to top button:', backToTopBtn);
+
+      if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+          // Show button when scrolled past navbar (approximately 100px)
+          if (window.scrollY > 100) {
+            backToTopBtn.classList.add('show');
+          } else {
+            backToTopBtn.classList.remove('show');
+          }
+        });
+
+        // Smooth scroll to top
+        backToTopBtn.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      } else {
+        console.error('Back to top button not found');
+      }
+    });
   </script>
+
+  <button id="backToTop" class="back-to-top" title="Back to Top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
 </body>
 
 </html>
