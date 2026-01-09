@@ -189,13 +189,12 @@ body::after {
   display: flex;
   width: 100%;
   max-width: 1400px;
-  gap: 60px;
-  background: linear-gradient(135deg, rgba(26, 26, 46, 0.6), rgba(15, 15, 30, 0.5));
-  backdrop-filter: blur(40px);
+  gap: 0;
+  background: transparent;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(139, 92, 246, 0.2);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  box-shadow: none;
+  border: none;
 }
 
 /* ================================
@@ -204,7 +203,7 @@ body::after {
 
 .auth-branding {
   flex: 1;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.08));
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(139, 92, 246, 0.04));
   backdrop-filter: blur(20px);
   padding: 60px 40px;
   color: var(--text-light);
@@ -213,7 +212,8 @@ body::after {
   justify-content: center;
   animation: slideInLeft 0.6s ease-out;
   min-height: 600px;
-  border-right: 1px solid rgba(139, 92, 246, 0.1);
+  border-right: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: 24px 0 0 24px;
 }
 
 .branding-content {
@@ -270,16 +270,15 @@ body::after {
   animation: fadeInUp 0.7s ease-out;
   animation-fill-mode: both;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
-  backdrop-filter: blur(10px);
+  background: transparent;
   border-radius: 16px;
   border: 1px solid rgba(139, 92, 246, 0.1);
   transition: all 0.3s ease;
 }
 
 .feature-item:hover {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.08));
-  border-color: rgba(139, 92, 246, 0.2);
+  background: rgba(139, 92, 246, 0.05);
+  border-color: rgba(139, 92, 246, 0.15);
 }
 
 .feature-item:nth-child(1) {
@@ -366,6 +365,10 @@ body::after {
   animation: slideInRight 0.6s ease-out;
   overflow-y: auto;
   max-height: 90vh;
+  background: rgba(26, 26, 46, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 0 24px 24px 0;
+  border: 1px solid rgba(139, 92, 246, 0.1);
 }
 
 .form-container {
@@ -522,10 +525,10 @@ body::after {
   gap: 12px;
   margin: 20px 0;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.08));
+  background: rgba(139, 92, 246, 0.05);
   backdrop-filter: blur(10px);
   border-radius: 12px;
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.1);
 }
 
 .form-check-input {
@@ -835,7 +838,7 @@ body::after {
 @media (max-width: 1024px) {
   .auth-wrapper {
     flex-direction: column;
-    gap: 40px;
+    gap: 0;
   }
 
   .auth-branding {
@@ -843,6 +846,11 @@ body::after {
     padding: 40px;
     border-right: none;
     border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+    border-radius: 24px 24px 0 0;
+  }
+
+  .auth-form-section {
+    border-radius: 0 0 24px 24px;
   }
 
   .logo-circle {
