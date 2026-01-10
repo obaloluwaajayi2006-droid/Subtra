@@ -126,6 +126,10 @@ body::after {
   }
 }
 
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
 /* ================================
    LAYOUT & SIDEBAR
    ================================ */
@@ -1154,13 +1158,6 @@ body::after {
     opacity: 1;
     transform: translateX(0);
   }
-}
-
-.subscription-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
 }
 
 .fintech-card {

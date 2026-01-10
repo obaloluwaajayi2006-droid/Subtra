@@ -1,15 +1,12 @@
-// ===============================
-// 🎨 APPLY SAVED THEME
-// ===============================
+// APPLY SAVED THEME
 
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "dark") {
   document.body.classList.add("dark-mode");
 }
 
-// ===============================
-// 📱 SIDEBAR TOGGLE (MOBILE)
-// ===============================
+
+// SIDEBAR TOGGLE (MOBILE)
 
 const sidebar = document.getElementById("sidebar");
 const sidebarToggle = document.getElementById("sidebarToggle");
@@ -39,9 +36,7 @@ document.querySelectorAll(".nav-link").forEach(link => {
   });
 });
 
-// ===============================
-// 👤 PROFILE DROPDOWN
-// ===============================
+// PROFILE DROPDOWN
 
 const profileBtn = document.getElementById("profileBtn");
 const profileDropdown = document.getElementById("profileDropdown");
@@ -63,7 +58,7 @@ document.getElementById("logoutDropdown").addEventListener("click", (e) => {
 });
 
 
-// 🔹 Toast notification
+// Toast notification
 const toastContainer = document.getElementById("toastContainer");
 
 function showToast({ title, message, type = "info", duration = 4000 }) {
@@ -86,9 +81,7 @@ function showToast({ title, message, type = "info", duration = 4000 }) {
   setTimeout(() => toast.remove(), duration);
 }
 
-// ===============================
-// 🔹 Firebase imports
-// ===============================
+// Firebase imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 import {
@@ -102,7 +95,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-// 🔹 Firebase config
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyD27SHH096KUpTNTp2K7kViRELHD6ALHH8",
   authDomain: "subtra-da8c1.firebaseapp.com",
@@ -112,14 +105,12 @@ const firebaseConfig = {
   appId: "1:795601435114:web:aaa12d19869dc00a5dda93"
 };
 
-// 🔹 Init
+// Init
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ===============================
-// 🔹 HELPER FUNCTIONS
-// ===============================
+// HELPER FUNCTIONS
 
 function calculateNextBillingDate(startDate, cycle) {
   const date = new Date(startDate);
@@ -132,7 +123,7 @@ function formatDate(dateStr) {
   return dateStr ? new Date(dateStr).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "N/A";
 }
 
-// 🔹 Elements
+// Elements
 const subsContainer = document.getElementById("subscriptions");
 const addSubForm = document.getElementById("addSubForm");
 const editSubForm = document.getElementById("editSubForm");
@@ -149,7 +140,7 @@ let currentEditId = null;
 let deleteTargetId = null;
 let allSubscriptions = [];
 
-// 🔹 Auth
+// Auth
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = "../signin/index.html";
@@ -287,7 +278,7 @@ onAuthStateChanged(auth, (user) => {
   });
 });
 
-// 🔹 Load dashboard (PAUSE / RESUME + BADGES)
+// Load dashboard (PAUSE / RESUME + BADGES)
 async function loadDashboard(userId) {
   const upcomingRenewals = document.getElementById("upcomingRenewals");
   const categoryBreakdown = document.getElementById("categoryBreakdown");
