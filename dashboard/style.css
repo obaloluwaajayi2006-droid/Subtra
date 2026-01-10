@@ -856,6 +856,11 @@ body::after {
   opacity: 0.7;
 }
 
+.subscription-card.expired {
+  opacity: 0.6;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
 .sub-header {
   display: flex;
   justify-content: space-between;
@@ -889,6 +894,11 @@ body::after {
 .sub-badge.renewing {
   background: rgba(251, 191, 36, 0.2);
   color: #fcd34d;
+}
+
+.sub-badge.expired {
+  background: rgba(239, 68, 68, 0.3);
+  color: #ff6b6b;
 }
 
 .sub-amount {

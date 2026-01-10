@@ -311,6 +311,7 @@ async function loadDashboard(userId) {
     allSubscriptions = [];
 
     const TODAY = new Date();
+    TODAY.setHours(0, 0, 0, 0);
     const RENEWING_SOON_DAYS = 7;
 
     // Process all subscriptions
@@ -319,6 +320,23 @@ async function loadDashboard(userId) {
       allSubscriptions.push({ id: snap.id, ...sub });
 
       const isPaused = sub.isActive === false;
+
+      // Check if subscription is expired
+      let isExpired = false;
+      if (sub.nextBillingDate) {
+        const nextDateParts = sub.nextBillingDate.split('-');
+        const next = new Date(parseInt(nextDateParts[0]), parseInt(nextDateParts[1]) - 1, parseInt(nextDateParts[2]));
+        next.setHours(0, 0, 0, 0);
+
+        if (next < TODAY) {
+          isExpired = true;
+        }
+      }
+
+      // Skip expired subscriptions from calculations
+      if (isExpired) {
+        return;
+      }
 
       // Calculate totals
       const monthlyAmount = sub.billingCycle === "yearly" ? sub.amount / 12 : sub.amount;
@@ -348,11 +366,22 @@ async function loadDashboard(userId) {
       }
     });
 
+    // Count active subscriptions (exclude expired)
+    const activeSubCount = allSubscriptions.filter(sub => {
+      if (sub.nextBillingDate) {
+        const nextDateParts = sub.nextBillingDate.split('-');
+        const next = new Date(parseInt(nextDateParts[0]), parseInt(nextDateParts[1]) - 1, parseInt(nextDateParts[2]));
+        next.setHours(0, 0, 0, 0);
+        return next >= TODAY;
+      }
+      return true;
+    }).length;
+
     // Update metrics
     monthlySpendEl.textContent = `₦${totalMonthly.toFixed(2)}`;
     yearlySpendEl.textContent = `₦${(totalMonthly * 12).toFixed(2)}`;
     potentialSavingsEl.textContent = `₦${totalPaused.toFixed(2)}`;
-    subCountEl.textContent = snapshot.size;
+    subCountEl.textContent = activeSubCount;
 
     // Display subscriptions with initial filters
     displayDashboardSubscriptions(allSubscriptions);
@@ -400,16 +429,46 @@ function displayDashboardSubscriptions(subscriptions) {
     const isPaused = sub.isActive === false;
     let statusClass = "active";
     let statusLabel = "Active";
+    let isExpired = false;
 
-    if (isPaused) {
-      statusClass = "paused";
-      statusLabel = "Paused";
-    } else {
+    // First check if subscription is expired (highest priority)
+    if (sub.nextBillingDate) {
+      // Get today's date at start of day (no time component)
       const TODAY = new Date();
-      if (sub.nextBillingDate) {
-        const next = new Date(sub.nextBillingDate);
-        const diffDays = Math.ceil((next - TODAY) / (1000 * 60 * 60 * 24));
+      TODAY.setHours(0, 0, 0, 0);
+
+      // Parse the next billing date (assuming YYYY-MM-DD format)
+      const nextDateParts = sub.nextBillingDate.split('-');
+      const next = new Date(parseInt(nextDateParts[0]), parseInt(nextDateParts[1]) - 1, parseInt(nextDateParts[2]));
+      next.setHours(0, 0, 0, 0);
+
+      // Compare dates
+      if (next < TODAY) {
+        // Subscription has expired
+        isExpired = true;
+        statusClass = "expired";
+        statusLabel = "Expired";
+      }
+    }
+
+    // If not expired, check other statuses
+    if (!isExpired) {
+      if (isPaused) {
+        statusClass = "paused";
+        statusLabel = "Paused";
+      } else if (sub.nextBillingDate) {
+        const TODAY = new Date();
+        TODAY.setHours(0, 0, 0, 0);
+
+        const nextDateParts = sub.nextBillingDate.split('-');
+        const next = new Date(parseInt(nextDateParts[0]), parseInt(nextDateParts[1]) - 1, parseInt(nextDateParts[2]));
+        next.setHours(0, 0, 0, 0);
+
+        const diffTime = next - TODAY;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
         if (diffDays >= 0 && diffDays <= 7) {
+          // Renewing soon
           statusClass = "renewing";
           statusLabel = "Renewing Soon";
         }
@@ -417,7 +476,7 @@ function displayDashboardSubscriptions(subscriptions) {
     }
 
     return `
-      <div class="subscription-card${isPaused ? " paused" : ""}">
+      <div class="subscription-card${isPaused ? " paused" : ""}${isExpired ? " expired" : ""}">
         <div class="sub-header">
           <h5 class="sub-name">${sub.name}</h5>
           <span class="sub-badge ${statusClass}">${statusLabel}</span>
@@ -429,7 +488,7 @@ function displayDashboardSubscriptions(subscriptions) {
         </p>
         <div class="sub-actions">
           <button class="sub-btn toggle" data-id="${sub.id}">
-            <i class="fas fa-${isPaused ? 'play' : 'pause'}"></i> ${isPaused ? 'Resume' : 'Pause'}
+            <i class="fas fa-${isPaused || isExpired ? 'play' : 'pause'}"></i> ${isPaused || isExpired ? 'Resume' : 'Pause'}
           </button>
           <button class="sub-btn edit" data-id="${sub.id}">
             <i class="fas fa-edit"></i> Edit
