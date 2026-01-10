@@ -141,11 +141,11 @@ function installApp() {
   if (!deferredPrompt) {
     console.log('No native install prompt available');
     console.log('Showing browser install instructions');
-    
+
     // Show helpful message based on browser/platform
     const userAgent = navigator.userAgent.toLowerCase();
     let instructions = '';
-    
+
     if (userAgent.includes('chrome')) {
       instructions = 'Click the install icon in your address bar, or:\n1. Menu (⋮) → "Install Subtra"';
     } else if (userAgent.includes('safari')) {
@@ -155,7 +155,7 @@ function installApp() {
     } else {
       instructions = 'Look for an install option in your browser menu or address bar';
     }
-    
+
     alert('📱 Install Subtra\n\n' + instructions + '\n\nIf you don\'t see an install option, try:\n- Using Chrome, Edge, or Safari\n- Making sure you\'re on HTTPS');
     return;
   }
@@ -220,6 +220,16 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
       .then(registration => {
         console.log('✓ Service Worker registered:', registration);
+        console.log('✓ Service Worker scope:', registration.scope);
+
+        // Check if SW is active
+        if (registration.active) {
+          console.log('✓ Service Worker is ACTIVE');
+        } else if (registration.installing) {
+          console.log('⏳ Service Worker is INSTALLING');
+        } else if (registration.waiting) {
+          console.log('⏳ Service Worker is WAITING');
+        }
       })
       .catch(error => {
         console.error('✗ Service Worker registration failed:', error);
@@ -228,3 +238,21 @@ if ('serviceWorker' in navigator) {
 } else {
   console.log('⚠ Service Worker not supported');
 }
+
+// Add comprehensive PWA diagnostics
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    console.log('\n=== PWA Installation Diagnostics ===');
+    console.log('Protocol:', window.location.protocol);
+    console.log('Hostname:', window.location.hostname);
+    console.log('deferredPrompt:', deferredPrompt ? '✓ Available' : '✗ Not available');
+    console.log('Service Worker:', 'serviceWorker' in navigator ? '✓ Supported' : '✗ Not supported');
+    console.log('Manifest link:', document.querySelector('link[rel="manifest"]') ? '✓ Found' : '✗ Missing');
+    console.log('Display mode:', getComputedStyle(document.documentElement).getPropertyValue('--display') || 'N/A');
+    console.log('\nIf beforeinstallprompt didn\'t fire:');
+    console.log('- Service worker may not be active yet');
+    console.log('- Try hard-refreshing (Ctrl+Shift+R)');
+    console.log('- Check DevTools > Application > Service Workers');
+    console.log('- Check DevTools > Application > Manifest');
+  }, 5000);
+});
