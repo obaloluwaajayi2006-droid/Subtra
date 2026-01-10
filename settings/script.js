@@ -25,9 +25,15 @@ const db = getFirestore(app);
 const darkModeToggle = document.getElementById("darkModeToggle");
 const savedTheme = localStorage.getItem("theme");
 
-if (savedTheme === "dark") {
+// Sync toggle with current body state
+if (document.body.classList.contains("dark-mode")) {
+  darkModeToggle.checked = true;
+} else if (savedTheme === "dark") {
   document.body.classList.add("dark-mode");
   darkModeToggle.checked = true;
+} else if (savedTheme === "light") {
+  document.body.classList.remove("dark-mode");
+  darkModeToggle.checked = false;
 }
 
 darkModeToggle.addEventListener("change", () => {

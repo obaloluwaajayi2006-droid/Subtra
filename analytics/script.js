@@ -205,7 +205,12 @@ function updateCategoryChart(categoryData) {
       plugins: {
         legend: {
           position: "bottom",
-          labels: { padding: 20, usePointStyle: true, font: { size: 12 } }
+          labels: {
+            padding: 20,
+            usePointStyle: true,
+            font: { size: 12 },
+            color: "#e4e4e7"
+          }
         }
       }
     }
@@ -252,7 +257,12 @@ function updateTrendChart(totalMonthly) {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { font: { size: 12 } } }
+        legend: {
+          labels: {
+            font: { size: 12 },
+            color: "#e4e4e7"
+          }
+        }
       },
       scales: {
         y: { beginAtZero: true }
