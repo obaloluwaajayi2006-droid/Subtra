@@ -1,16 +1,16 @@
 // Service Worker for Subtra PWA
 const CACHE_NAME = 'subtra-v1';
 const urlsToCache = [
-  './',
-  './index.html',
-  './dashboard/index.html',
-  './subscriptions/index.html',
-  './analytics/index.html',
-  './profile/index.html',
-  './settings/index.html',
-  './notifications/index.html',
-  './dashboard/style.css',
-  './notifications/style.css',
+  '/',
+  '/index.html',
+  '/dashboard/index.html',
+  '/subscriptions/index.html',
+  '/analytics/index.html',
+  '/profile/index.html',
+  '/settings/index.html',
+  '/notifications/index.html',
+  '/dashboard/style.css',
+  '/notifications/style.css',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
   'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
