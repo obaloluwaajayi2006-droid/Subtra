@@ -4,6 +4,7 @@ let installBanner = null;
 
 // Capture the beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('beforeinstallprompt event fired');
   // Prevent the mini-infobar from appearing on mobile
   e.preventDefault();
   // Stash the event for later use
@@ -11,6 +12,16 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
   // Show custom install banner
   showInstallBanner();
+});
+
+// Handle case where beforeinstallprompt doesn't fire (already installed or not PWA-ready)
+window.addEventListener('load', () => {
+  console.log('PWA Install Script loaded');
+  console.log('Service Worker supported:', 'serviceWorker' in navigator);
+  console.log('Manifest present:', document.querySelector('link[rel="manifest"]') !== null);
+  if (!deferredPrompt) {
+    console.log('Note: beforeinstallprompt not captured - app may already be installable or device may require HTTPS');
+  }
 });
 
 function showInstallBanner() {
@@ -97,6 +108,12 @@ function showInstallBanner() {
 
 function installApp() {
   if (!deferredPrompt) {
+    console.warn('Install prompt not available. This usually means:');
+    console.warn('1. Your app is not served over HTTPS');
+    console.warn('2. You\'re on localhost (which is allowed for testing)');
+    console.warn('3. The manifest.json is not properly linked');
+    console.warn('4. The service worker failed to register');
+    alert('Install feature is only available when the app is served over HTTPS or localhost. Please deploy to a secure server.');
     return;
   }
 
@@ -147,7 +164,7 @@ window.addEventListener('appinstalled', () => {
 // Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('./service-worker.js')
       .then(registration => {
         console.log('Service Worker registered successfully:', registration);
       })
