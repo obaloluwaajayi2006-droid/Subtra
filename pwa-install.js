@@ -2,35 +2,61 @@
 let deferredPrompt;
 let installBanner = null;
 
+// Check initial state
+console.log('=== PWA Install Script Starting ===');
+console.log('HTTPS:', window.location.protocol === 'https:');
+console.log('Localhost:', window.location.hostname === 'localhost');
+console.log('Service Worker Support:', 'serviceWorker' in navigator);
+
 // Capture the beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', (e) => {
-  console.log('beforeinstallprompt event fired');
-  // Prevent the mini-infobar from appearing on mobile
+  console.log('✓ beforeinstallprompt event FIRED - PWA is installable!');
   e.preventDefault();
-  // Stash the event for later use
   deferredPrompt = e;
-
-  // Show custom install banner
-  showInstallBanner();
+  showInstallBanner(true);
 });
 
-// Handle case where beforeinstallprompt doesn't fire (already installed or not PWA-ready)
+// Show banner on load (with fallback for Vercel)
 window.addEventListener('load', () => {
-  console.log('PWA Install Script loaded');
+  console.log('✓ Page loaded');
   console.log('Service Worker supported:', 'serviceWorker' in navigator);
   console.log('Manifest present:', document.querySelector('link[rel="manifest"]') !== null);
-  if (!deferredPrompt) {
-    console.log('Note: beforeinstallprompt not captured - app may already be installable or device may require HTTPS');
+
+  // Debug: Check manifest file
+  fetch('/manifest.json')
+    .then(r => {
+      console.log('✓ Manifest accessible:', r.status);
+      return r.json();
+    })
+    .then(m => console.log('✓ Manifest loaded:', m.name))
+    .catch(e => console.error('✗ Manifest error:', e));
+
+  // If running on Vercel and deferredPrompt never fired, show fallback after delay
+  if (!deferredPrompt && window.location.hostname.includes('vercel')) {
+    console.log('⚠ No beforeinstallprompt on Vercel - showing fallback banner');
+    setTimeout(() => {
+      if (!deferredPrompt && !installBanner) {
+        showInstallBanner(false);
+      }
+    }, 2000);
+  }
+
+  // FORCE show banner on Vercel regardless (for debugging/guaranteed visibility)
+  if (window.location.hostname.includes('vercel') && !installBanner) {
+    console.log('🔧 Force-showing install banner on Vercel (3 sec delay)');
+    setTimeout(() => {
+      if (!installBanner) {
+        showInstallBanner(false);
+      }
+    }, 3000);
   }
 });
 
-function showInstallBanner() {
-  // Check if banner already exists
+function showInstallBanner(hasPrompt = true) {
   if (document.getElementById('pwa-install-banner')) {
     return;
   }
 
-  // Create banner HTML
   const banner = document.createElement('div');
   banner.id = 'pwa-install-banner';
   banner.innerHTML = `
@@ -39,58 +65,64 @@ function showInstallBanner() {
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.95), rgba(168, 85, 247, 0.95));
+      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
       backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(139, 92, 246, 0.3);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
       padding: 16px;
       z-index: 9999;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      font-family: 'Outfit', sans-serif;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      box-shadow: 0 -4px 20px rgba(139, 92, 246, 0.3);
     ">
-      <div style="flex: 1;">
+      <div style="flex: 1; min-width: 0;">
         <div style="
-          font-weight: 600;
+          font-weight: 700;
           color: white;
-          font-size: 14px;
+          font-size: 15px;
           margin-bottom: 4px;
+          letter-spacing: 0.3px;
         ">Install Subtra</div>
         <div style="
-          color: rgba(255, 255, 255, 0.9);
-          font-size: 12px;
+          color: rgba(255, 255, 255, 0.85);
+          font-size: 13px;
+          opacity: 0.95;
         ">subtra.vercel.app</div>
       </div>
       <button id="pwa-install-btn" style="
         background: white;
         color: #8b5cf6;
         border: none;
-        padding: 8px 16px;
-        border-radius: 6px;
-        font-weight: 600;
-        font-size: 13px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 14px;
         cursor: pointer;
         white-space: nowrap;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         font-family: 'Outfit', sans-serif;
-      " onmouseover="this.style.opacity='0.9'; this.style.transform='scale(1.05)'" onmouseout="this.style.opacity='1'; this.style.transform='scale(1)'">
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        flex-shrink: 0;
+      " onmouseover="this.style.transform='scale(1.08)'; this.style.opacity='0.95';" onmouseout="this.style.transform='scale(1)'; this.style.opacity='1';">
         Install
       </button>
       <button id="pwa-close-btn" style="
         background: none;
         border: none;
         color: white;
-        font-size: 20px;
+        font-size: 24px;
         cursor: pointer;
         padding: 0;
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
-      ">
+        transition: all 0.2s;
+        flex-shrink: 0;
+      " onmouseover="this.style.opacity='0.7';" onmouseout="this.style.opacity='1';">
         ✕
       </button>
     </div>
@@ -99,33 +131,26 @@ function showInstallBanner() {
   document.body.appendChild(banner);
   installBanner = banner;
 
-  // Install button click handler
   document.getElementById('pwa-install-btn').addEventListener('click', installApp);
-
-  // Close button click handler
   document.getElementById('pwa-close-btn').addEventListener('click', closeBanner);
+
+  console.log('✓ Install banner displayed');
 }
 
 function installApp() {
   if (!deferredPrompt) {
-    console.warn('Install prompt not available. This usually means:');
-    console.warn('1. Your app is not served over HTTPS');
-    console.warn('2. You\'re on localhost (which is allowed for testing)');
-    console.warn('3. The manifest.json is not properly linked');
-    console.warn('4. The service worker failed to register');
-    alert('Install feature is only available when the app is served over HTTPS or localhost. Please deploy to a secure server.');
+    console.log('No install prompt available');
+    alert('Install is only available on Chrome/Edge/Samsung Browser. Please use one of these browsers or deploy to a secure HTTPS server.');
     return;
   }
 
-  // Show the install prompt
   deferredPrompt.prompt();
 
-  // Wait for the user to respond to the prompt
   deferredPrompt.userChoice.then((choiceResult) => {
     if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the install prompt');
+      console.log('✓ User accepted install');
     } else {
-      console.log('User dismissed the install prompt');
+      console.log('User dismissed install');
     }
     deferredPrompt = null;
     closeBanner();
@@ -142,7 +167,7 @@ function closeBanner() {
   }
 }
 
-// Add animation style
+// Add animation
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideDown {
@@ -151,12 +176,24 @@ style.textContent = `
       opacity: 0;
     }
   }
+  
+  @media (max-width: 480px) {
+    #pwa-install-banner {
+      padding: 12px !important;
+    }
+    #pwa-install-banner div:first-child {
+      font-size: 13px !important;
+    }
+    #pwa-install-btn {
+      padding: 8px 16px !important;
+      font-size: 13px !important;
+    }
+  }
 `;
 document.head.appendChild(style);
 
-// Track app installation
 window.addEventListener('appinstalled', () => {
-  console.log('Subtra was installed');
+  console.log('✓ App installed successfully!');
   closeBanner();
   deferredPrompt = null;
 });
@@ -164,26 +201,14 @@ window.addEventListener('appinstalled', () => {
 // Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
       .then(registration => {
-        console.log('Service Worker registered successfully:', registration);
+        console.log('✓ Service Worker registered:', registration);
       })
       .catch(error => {
-        console.log('Service Worker registration failed:', error);
+        console.error('✗ Service Worker registration failed:', error);
       });
   });
+} else {
+  console.log('⚠ Service Worker not supported');
 }
-
-// Check if app is running as standalone (installed)
-if (window.navigator.standalone === true) {
-  console.log('App is running as installed PWA');
-}
-
-// Handle app visibility
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    console.log('App hidden');
-  } else {
-    console.log('App visible');
-  }
-});
