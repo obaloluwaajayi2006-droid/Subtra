@@ -1,4 +1,5 @@
 # Firebase service account keys
 functions/*.json
-*.json
+!manifest.json
+!vercel.json
 

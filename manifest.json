@@ -1,0 +1,53 @@
+{
+  "name": "Subtra - Subscription Manager",
+  "short_name": "Subtra",
+  "description": "Manage all your subscriptions in one place. Track spending, set reminders, and never miss a billing date.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f0f1e",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%238b5cf6' width='192' height='192'/><text x='50%' y='50%' font-size='80' font-weight='bold' text-anchor='middle' dy='.3em' fill='white' font-family='Arial'>S</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%238b5cf6' width='512' height='512'/><text x='50%' y='50%' font-size='250' font-weight='bold' text-anchor='middle' dy='.3em' fill='white' font-family='Arial'>S</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230f0f1e' width='540' height='720'/><rect fill='%238b5cf6' x='20' y='100' width='500' height='200' rx='10'/><text x='50%' y='150' font-size='40' font-weight='bold' text-anchor='middle' fill='white' font-family='Arial'>Subtra</text><text x='50%' y='250' font-size='24' text-anchor='middle' fill='white' font-family='Arial'>Manage Subscriptions</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": [
+    "productivity",
+    "finance"
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your subscription dashboard",
+      "url": "/dashboard/index.html",
+      "icons": []
+    },
+    {
+      "name": "Subscriptions",
+      "short_name": "Subs",
+      "description": "Manage your subscriptions",
+      "url": "/subscriptions/index.html",
+      "icons": []
+    }
+  ]
+}
