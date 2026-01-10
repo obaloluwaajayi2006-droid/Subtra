@@ -139,8 +139,24 @@ function showInstallBanner(hasPrompt = true) {
 
 function installApp() {
   if (!deferredPrompt) {
-    console.log('No install prompt available');
-    alert('Install is only available on Chrome/Edge/Samsung Browser. Please use one of these browsers or deploy to a secure HTTPS server.');
+    console.log('No native install prompt available');
+    console.log('Showing browser install instructions');
+    
+    // Show helpful message based on browser/platform
+    const userAgent = navigator.userAgent.toLowerCase();
+    let instructions = '';
+    
+    if (userAgent.includes('chrome')) {
+      instructions = 'Click the install icon in your address bar, or:\n1. Menu (⋮) → "Install Subtra"';
+    } else if (userAgent.includes('safari')) {
+      instructions = 'Safari: Tap Share → "Add to Home Screen"';
+    } else if (userAgent.includes('firefox')) {
+      instructions = 'Firefox: Menu (≡) → "Install" or look for the install prompt';
+    } else {
+      instructions = 'Look for an install option in your browser menu or address bar';
+    }
+    
+    alert('📱 Install Subtra\n\n' + instructions + '\n\nIf you don\'t see an install option, try:\n- Using Chrome, Edge, or Safari\n- Making sure you\'re on HTTPS');
     return;
   }
 
