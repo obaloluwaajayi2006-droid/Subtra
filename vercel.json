@@ -1,4 +1,14 @@
 {
+  "rewrites": [
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/analytics", "destination": "/analytics/index.html" },
+    { "source": "/notifications", "destination": "/notifications/index.html" },
+    { "source": "/profile", "destination": "/profile/index.html" },
+    { "source": "/settings", "destination": "/settings/index.html" },
+    { "source": "/signin", "destination": "/signin/index.html" },
+    { "source": "/signup", "destination": "/signup/index.html" },
+    { "source": "/subscriptions", "destination": "/subscriptions/index.html" }
+  ],
   "headers": [
     {
       "source": "/manifest.json",
