@@ -1,13 +1,14 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/index.html"
+      "source": "/404",
+      "destination": "/404.html"
     },
     {
-      "source": "/(dashboard|analytics|notifications|profile|settings|signin|signup|subscriptions)/?",
-      "destination": "/$1/index.html"
+      "source": "/(.*)",
+      "destination": "/404.html"
     }
   ],
   "headers": [

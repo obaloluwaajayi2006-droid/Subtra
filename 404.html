@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subtra</title>
+  <script>
+    // Handle clean URLs by routing to appropriate index.html
+    const path = window.location.pathname;
+    const segments = path.split('/').filter(Boolean);
+    
+    if (segments.length > 0) {
+      const route = segments[0];
+      const validRoutes = ['dashboard', 'analytics', 'profile', 'settings', 'signin', 'signup', 'subscriptions', 'notifications'];
+      
+      if (validRoutes.includes(route)) {
+        window.location.href = `/${route}/index.html`;
+      } else {
+        window.location.href = '/index.html';
+      }
+    } else {
+      window.location.href = '/index.html';
+    }
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>
