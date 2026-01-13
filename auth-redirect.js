@@ -159,7 +159,7 @@ function showRedirectToast(secondsToRedirect = 10) {
     if (remainingSeconds <= 0) {
       clearInterval(interval);
       if (isRedirecting) {
-        window.location.href = "./dashboard/index.html";
+        window.location.href = "/dashboard";
       }
     }
   }, 1000);
@@ -178,7 +178,7 @@ function showRedirectToast(secondsToRedirect = 10) {
   continueBtn.addEventListener("click", () => {
     isRedirecting = false;
     clearInterval(interval);
-    window.location.href = "./dashboard/index.html";
+    window.location.href = "/dashboard";
   });
 
   // Add CSS animations

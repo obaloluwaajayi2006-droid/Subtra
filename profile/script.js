@@ -53,7 +53,7 @@ let userData = {
 async function loadUserProfile() {
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
-      window.location.href = '/signin/index.html';
+      window.location.href = '/signin';
       return;
     }
 
@@ -361,7 +361,7 @@ document.getElementById('logoutDropdown').addEventListener('click', (e) => {
   e.preventDefault();
   if (confirm('Are you sure you want to logout?')) {
     auth.signOut().then(() => {
-      window.location.href = '/signin/index.html';
+      window.location.href = '/signin';
     }).catch(error => {
       console.error('Error signing out:', error);
       showToast('Error logging out', 'error');
@@ -375,7 +375,7 @@ if (logoutBtn) {
     e.preventDefault();
     if (confirm('Are you sure you want to logout?')) {
       auth.signOut().then(() => {
-        window.location.href = '/signin/index.html';
+        window.location.href = '/signin';
       }).catch(error => {
         console.error('Error signing out:', error);
         showToast('Error logging out', 'error');

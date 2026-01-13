@@ -118,7 +118,7 @@ form.addEventListener("submit", async (e) => {
       message: `Welcome ${displayName}! Redirecting you to signin...`,
       type: "success"
     });
-    window.location.href = "../signin/index.html";
+    window.location.href = "/signin";
 
   } catch (error) {
     console.error(error);
@@ -160,7 +160,7 @@ googleBtn.addEventListener("click", async () => {
     });
 
     setTimeout(() => {
-      window.location.href = "../dashboard/index.html";
+      window.location.href = "/dashboard";
     }, 1500);
 
   } catch (error) {

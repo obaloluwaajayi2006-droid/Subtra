@@ -439,7 +439,7 @@ confirmDeleteBtn.addEventListener("click", async () => {
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = "../signin/index.html";
+    window.location.href = "/signin";
     return;
   }
 

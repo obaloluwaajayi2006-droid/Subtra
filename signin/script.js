@@ -88,7 +88,7 @@ form.addEventListener("submit", async (e) => {
       type: "success"
     });
     console.log("Logged in user UID:", user.uid);
-    window.location.href = "../dashboard/index.html";
+    window.location.href = "/dashboard";
 
   } catch (error) {
     console.error(error);
@@ -131,7 +131,7 @@ googleBtn.addEventListener("click", async () => {
     });
 
     setTimeout(() => {
-      window.location.href = "../dashboard/index.html";
+      window.location.href = "/dashboard";
     }, 1500);
 
   } catch (error) {

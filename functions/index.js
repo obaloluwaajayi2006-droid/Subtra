@@ -194,7 +194,7 @@ function generateEmailHtml(userName, subscriptions) {
             
             <p>Make sure your payment method is up to date to avoid any interruptions in your service.</p>
             
-            <a href="https://subtra-da8c1.firebaseapp.com/dashboard/index.html" class="btn">Manage Subscriptions</a>
+            <a href="https://subtra-da8c1.firebaseapp.com/dashboard" class="btn">Manage Subscriptions</a>
           </div>
           <div class="footer">
             <p>© 2026 Subtra. All rights reserved.</p>
