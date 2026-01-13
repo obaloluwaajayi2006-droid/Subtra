@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
       "source": "/(dashboard|analytics|notifications|profile|settings|signin|signup|subscriptions)/?",
       "destination": "/$1/index.html"
     }
