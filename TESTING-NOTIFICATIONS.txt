@@ -1,0 +1,311 @@
+================================================================================
+TESTING YOUR PUSH NOTIFICATION SYSTEM
+================================================================================
+
+Before going live, test your notification system thoroughly. This guide walks
+you through testing each component.
+
+================================================================================
+PART 1: PRE-DEPLOYMENT CHECKS
+================================================================================
+
+Before deploying, verify:
+
+□ firebase-config.js
+  - Contains your correct Firebase project ID: subtra-da8c1
+  - All 6 config values are filled in
+  - No "YOUR_" placeholders remain
+
+□ firebase-messaging-sw.js
+  - Contains your Firebase config
+  - No "YOUR_" placeholders remain
+
+□ notifications-fcm.js
+  - getVAPIDKey() returns your actual VAPID public key
+  - No "YOUR_" placeholders remain
+
+□ dashboard/index.html
+  - Has <button id="enable-notifications-btn"> button
+  - All Firebase SDK scripts are included
+  - Notification scripts are included
+
+□ functions/index.js
+  - Exports sendNotification, sendNotificationToTopic, etc.
+  - No syntax errors
+
+□ functions/sendNotification.js
+  - Exists in functions/ folder
+  - Has all required functions
+
+================================================================================
+PART 2: LOCAL TESTING IN BROWSER
+================================================================================
+
+Step 1: Open your dashboard in a browser
+  1. Navigate to http://localhost:3000/dashboard (or your dev server URL)
+  2. Sign in with your test account
+  3. Open browser DevTools (F12)
+  4. Go to Console tab
+
+Step 2: Enable notifications
+  1. Look for the notification bell button (✓ should be in top bar)
+  2. Click "Enable Notifications" button
+  3. You'll see a browser permission prompt
+  4. Click "Allow"
+  5. In console, you should see:
+     ✓ FCM Manager initialized
+     ✓ Service Worker registered for messaging
+     ✓ Notification permission granted
+     ✓ FCM Token obtained: [token preview]
+     ✓ Token saved to Firestore
+
+Step 3: Check in Firestore
+  1. Go to Firebase Console → Firestore Database
+  2. Look for: users → [your-user-id] → fcmTokens
+  3. Should contain a document with your device token and metadata
+  4. If missing, check browser console for errors
+
+Step 4: Test notification (from browser)
+  1. In browser console, type:
+     fcm.sendTestNotification("Test Title", "This is a test notification");
+  
+  2. You should see:
+     - A foreground notification (if tab is active)
+     - Or a system notification (if tab is in background)
+
+Expected behavior:
+  ✓ Notification appears with title and message
+  ✓ Can click notification to interact with it
+  ✓ Notification has a close button
+
+Step 5: Send background message test
+  1. Deploy Cloud Functions (see CLOUD-FUNCTIONS-DEPLOYMENT.txt)
+  2. Click the notification button
+  3. Minimize or switch away from browser
+  4. In Firebase Console → Functions, call sendNotification with:
+     {
+       "userId": "your-user-id",
+       "title": "Background Test",
+       "body": "You should see this when app is closed"
+     }
+  5. You should receive a system notification
+
+================================================================================
+PART 3: TESTING SERVICE WORKER
+================================================================================
+
+Service Worker should handle background messages. To test:
+
+Step 1: Register service worker
+  1. In browser console, check:
+     navigator.serviceWorker.getRegistrations()
+  2. Should return at least one registered service worker
+
+Step 2: Test background handling
+  1. Open DevTools Network tab
+  2. Filter by "manifest"
+  3. Go offline (DevTools → Network tab → Offline checkbox)
+  4. Try sending a notification
+  5. Service worker should handle it even offline
+
+Step 3: Check service worker logs
+  1. In DevTools, go to Application tab
+  2. Click "Service Workers" in left sidebar
+  3. Click your service worker
+  4. Check "console" for any errors
+
+Expected service worker messages:
+  ✓ Firebase messaging service worker registered
+  ✓ [Background Message received] - when message arrives
+  ✓ Notification shown to user
+
+================================================================================
+PART 4: TESTING DIFFERENT SCENARIOS
+================================================================================
+
+Scenario 1: App is open and focused
+  Expected: Foreground message handler fires, displays in-app notification
+  
+  To test:
+  1. Have dashboard open and focused
+  2. Send notification from Cloud Functions
+  3. Should see notification appear in your app (not system notification)
+
+Scenario 2: App is open but not focused
+  Expected: Background message handler fires, system notification shows
+  
+  To test:
+  1. Have dashboard open but click another tab
+  2. Send notification from Cloud Functions
+  3. Should see system notification from browser
+
+Scenario 3: App is completely closed
+  Expected: Service worker catches message, shows system notification
+  
+  To test:
+  1. Close browser completely
+  2. Send notification from Cloud Functions
+  3. System notification should appear when you reopen browser
+  4. Clicking should open your app to dashboard
+
+Scenario 4: Multiple devices
+  Expected: Each device has unique token, receives independent notifications
+  
+  To test:
+  1. Open dashboard on phone and desktop
+  2. Each gets unique FCM token in Firestore
+  3. Send notification to specific token - only that device receives it
+  4. Send to user ID - all devices receive it
+
+Scenario 5: Permission denied
+  Expected: Button shows "Enable Notifications", no token saved
+  
+  To test:
+  1. Clear site data (DevTools → Application → Storage → Clear all)
+  2. Click notification button
+  3. Click "Block" in permission prompt
+  4. In console should see: ⚠ Notification permission denied
+
+================================================================================
+PART 5: FIRESTORE VERIFICATION
+================================================================================
+
+Check these collections in Firebase Console → Firestore:
+
+1. users/{userId}/fcmTokens
+   Should contain:
+   {
+     token: "device-token-string",
+     platform: "Windows" (or other OS),
+     browser: "Chrome" (or other),
+     createdAt: timestamp,
+     lastUsed: timestamp
+   }
+
+2. fcmTokenIndex (optional)
+   For faster lookups of user tokens
+   Should contain same data indexed by token
+
+3. users/{userId}/notificationSettings (if using preferences)
+   Should contain user notification preferences
+
+If any collection is empty:
+  1. Check browser console for errors
+  2. Verify Firestore security rules are applied
+  3. Verify user is authenticated
+  4. Check that getAndSaveToken() is being called
+
+================================================================================
+PART 6: COMMON ISSUES & FIXES
+================================================================================
+
+Issue: "Permission denied" errors in console
+Fix:
+  1. Go to Firebase Console → Firestore → Rules
+  2. Verify security rules are properly pasted and published
+  3. Check that user is authenticated (auth.currentUser exists)
+  4. Try clearing site data and reloading
+
+Issue: Service Worker shows red/failed status
+Fix:
+  1. Check DevTools → Application → Service Workers
+  2. Click the worker and check "console" for errors
+  3. Most common: firebaseConfig is undefined
+  4. Verify firebase-config.js is properly loaded
+  5. Verify it loads BEFORE firebase-messaging-sw.js
+
+Issue: "Token undefined" or "getToken failed"
+Fix:
+  1. Check that VAPID key is correct in notifications-fcm.js
+  2. Verify messaging service is initialized
+  3. Check browser console for specific error message
+  4. Try: firebase.messaging().getToken({ vapidKey: "YOUR_KEY" })
+
+Issue: Notification not showing even though token was saved
+Fix:
+  1. Check FCM token is in Firestore
+  2. Verify Cloud Functions are deployed
+  3. Check Cloud Functions logs for errors
+  4. Verify firebaseConfig in sendNotification.js matches your project
+
+Issue: CORS errors when calling Cloud Functions
+Fix:
+  1. Cloud Functions should handle CORS automatically
+  2. If not, add CORS headers to functions:
+     response.set('Access-Control-Allow-Origin', '*');
+  3. Verify function is deployed (firebase deploy --only functions)
+
+Issue: Browser doesn't show notification permission prompt
+Fix:
+  1. Some browsers require HTTPS (production) or localhost (dev)
+  2. Check browser notification settings
+  3. Try incognito window to bypass per-site settings
+  4. Check DevTools → Application → Permissions
+
+================================================================================
+PART 7: LOAD TESTING (Optional)
+================================================================================
+
+Once basic tests pass, test with multiple notifications:
+
+1. Create test script:
+   for (let i = 0; i < 10; i++) {
+     setTimeout(() => {
+       fcm.sendTestNotification(`Test ${i}`, `Message number ${i}`);
+     }, i * 1000);
+   }
+
+2. Run in browser console
+
+3. Monitor:
+   - No crashes or memory leaks
+   - All notifications shown
+   - Service worker handles all messages
+   - No duplicate notifications
+
+4. Check Firestore usage stays within free tier
+
+================================================================================
+PART 8: PRODUCTION CHECKLIST
+================================================================================
+
+Before going live, ensure:
+
+□ All config files have real values (no "YOUR_" placeholders)
+□ Firestore security rules are published
+□ Cloud Functions are deployed
+□ Service worker is registered
+□ HTTPS is enabled (required for production)
+□ Firebase console shows no errors
+□ Test notification works on multiple devices
+□ Permission prompt appears correctly
+□ Tokens are saved to Firestore
+□ Notifications appear in foreground and background
+□ Dashboard notification button is visible
+
+Once all checks pass, your notification system is ready for users!
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. Deploy Cloud Functions:
+   firebase deploy --only functions
+
+2. Test in browser (this guide)
+
+3. Push to production:
+   git push origin main
+   (if using GitHub deployment)
+
+4. Monitor in Firebase Console:
+   - Firestore → Data
+   - Functions → Logs
+   - Analytics (if enabled)
+
+5. Troubleshoot any issues using:
+   - Browser console (F12)
+   - Cloud Functions logs
+   - Firestore error logs
+
+================================================================================

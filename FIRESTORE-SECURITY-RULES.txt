@@ -1,0 +1,84 @@
+================================================================================
+FIRESTORE SECURITY RULES FOR SUBTRA PWA
+================================================================================
+
+Copy and paste these rules into your Firebase Console:
+1. Go to Firebase Console → Your Project → Firestore Database
+2. Click on the "Rules" tab
+3. Delete the existing rules
+4. Paste the following rules
+5. Click "Publish"
+
+================================================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Allow authenticated users to read/write their own subscriptions
+    match /users/{userId}/subscriptions/{document=**} {
+      allow read, write: if request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to manage their FCM tokens
+    match /users/{userId}/fcmTokens/{document=**} {
+      allow read, write: if request.auth.uid == userId;
+    }
+    
+    // Allow reading from FCM token index (for server-side operations)
+    match /fcmTokenIndex/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if false; // Write only through Cloud Functions
+    }
+    
+    // Allow authenticated users to read their user data
+    match /users/{userId} {
+      allow read: if request.auth.uid == userId;
+      allow write: if request.auth.uid == userId && request.resource.data.keys().hasOnly(['email', 'displayName', 'photoURL', 'createdAt', 'updatedAt']);
+    }
+    
+    // Allow reading notification settings
+    match /users/{userId}/notificationSettings/{document=**} {
+      allow read, write: if request.auth.uid == userId;
+    }
+    
+    // Analytics logs (optional - for tracking notifications)
+    match /notifications/{document=**} {
+      allow write: if request.auth != null;
+      allow read: if false; // Only for admin/server access
+    }
+    
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+================================================================================
+EXPLANATION OF RULES:
+================================================================================
+
+1. Subscriptions: Users can only read/write their own subscriptions
+2. FCM Tokens: Users can only manage their own tokens
+3. FCM Token Index: Only readable (for finding users to notify)
+4. User Data: Users can only update specific fields
+5. Notification Settings: Users can manage their notification preferences
+6. Notifications Log: Can be written by authenticated users (optional)
+
+These rules ensure:
+✓ Data privacy - users can only access their own data
+✓ Security - Cloud Functions can still write to collections
+✓ Scalability - efficient token lookups for notifications
+
+================================================================================
+NEXT STEPS:
+================================================================================
+
+1. Open Firebase Console: https://console.firebase.google.com
+2. Select your "subtra-da8c1" project
+3. Go to Firestore Database → Rules tab
+4. Copy and paste the rules above
+5. Click "Publish"
+
+Once published, your notification system will be secure and ready to use!

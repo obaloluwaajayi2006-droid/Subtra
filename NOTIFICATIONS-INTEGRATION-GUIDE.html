@@ -1,0 +1,284 @@
+/**
+* Example HTML Integration
+*
+* How to add notification features to your pages
+* Copy and paste examples from this file into your HTML
+*/
+
+<!--
+  ============================================================================
+  OPTION 1: Simple Enable Notifications Button
+  ============================================================================
+  
+  Add this button to your page (e.g., settings, dashboard, or navigation)
+-->
+
+<button id="enable-notifications-btn" class="btn btn-primary" type="button"
+  title="Enable push notifications for this app">
+  <i class="fas fa-bell"></i> Enable Notifications
+</button>
+
+<!-- Required scripts (add to the end of body) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js"></script>
+<script src="/firebase-config.js"></script>
+<script src="/notifications-fcm.js"></script>
+<script src="/notifications-ui.js"></script>
+
+<!--
+  ============================================================================
+  OPTION 2: Add to Settings Page
+  ============================================================================
+  
+  In settings/index.html, add a notification preferences section:
+-->
+
+<div class="notification-settings card">
+  <div class="card-header">
+    <h5><i class="fas fa-bell"></i> Push Notifications</h5>
+  </div>
+  <div class="card-body">
+    <p>Get notified about subscription renewals and important updates.</p>
+
+    <div class="d-grid gap-2">
+      <button id="enable-notifications-btn" class="btn btn-primary" type="button">
+        <i class="fas fa-bell"></i> Enable Notifications
+      </button>
+    </div>
+
+    <!-- Status Display -->
+    <div id="notification-status" style="margin-top: 20px;"></div>
+  </div>
+</div>
+
+<!--
+  ============================================================================
+  OPTION 3: Add Notification Preferences Dropdown
+  ============================================================================
+  
+  In navbar/header:
+-->
+
+<div class="dropdown">
+  <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="notificationMenu">
+    <i class="fas fa-bell"></i> Notifications
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li>
+      <button class="dropdown-item" id="enable-notifications-btn">
+        <i class="fas fa-check-circle"></i> Enable Notifications
+      </button>
+    </li>
+    <li>
+      <button class="dropdown-item" onclick="showNotificationSettings()">
+        <i class="fas fa-cog"></i> Settings
+      </button>
+    </li>
+    <li>
+      <hr class="dropdown-divider">
+    </li>
+    <li>
+      <button class="dropdown-item" onclick="testNotification()">
+        <i class="fas fa-paper-plane"></i> Send Test
+      </button>
+    </li>
+  </ul>
+</div>
+
+<!--
+  ============================================================================
+  OPTION 4: JavaScript Examples - Calling from Code
+  ============================================================================
+-->
+
+<script>
+  // Request notification permission programmatically
+  async function handleSubscriptionCreated() {
+    const shouldNotify = await enableNotifications();
+    if (shouldNotify) {
+      console.log('User has enabled notifications');
+      // You can now save subscription with notification flag
+    }
+  }
+
+  // Send test notification to current user
+  async function testNotification() {
+    try {
+      if (!firebase.auth().currentUser) {
+        alert('Please sign in first');
+        return;
+      }
+
+      // Call the Cloud Function
+      const sendNotification = firebase.functions().httpsCallable('sendNotification');
+      const result = await sendNotification({
+        userId: firebase.auth().currentUser.uid,
+        title: 'Test Notification',
+        body: 'This is a test notification from Subtra!',
+        icon: '/icon-192x192.png',
+        clickAction: '/subscriptions'
+      });
+
+      alert('Test notification sent!');
+      console.log('Result:', result);
+    } catch (error) {
+      console.error('Error sending test notification:', error);
+      alert('Error: ' + error.message);
+    }
+  }
+
+  // Subscribe to announcements topic
+  async function subscribeToAnnouncements() {
+    try {
+      const subscribeFunc = firebase.functions().httpsCallable('subscribeToTopic');
+      await subscribeFunc({ topic: 'announcements' });
+      alert('Subscribed to announcements');
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  // Listen for FCM messages
+  window.addEventListener('fcm-message', (event) => {
+    console.log('Received notification:', event.detail);
+    // Handle the message in your app
+    // For example, refresh subscription list or show badge
+  });
+
+  // Check notification status
+  function showNotificationStatus() {
+    const permission = Notification.permission;
+    const statusEl = document.getElementById('notification-status');
+
+    if (statusEl) {
+      if (permission === 'granted') {
+        statusEl.innerHTML = `
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i> Notifications are enabled
+        </div>
+      `;
+      } else if (permission === 'denied') {
+        statusEl.innerHTML = `
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle"></i> 
+          Notification permission denied. Enable in browser settings.
+        </div>
+      `;
+      } else {
+        statusEl.innerHTML = `
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i> 
+          Click the button above to enable notifications
+        </div>
+      `;
+      }
+    }
+  }
+
+  // Call this on page load
+  document.addEventListener('DOMContentLoaded', showNotificationStatus);
+</script>
+
+<!--
+  ============================================================================
+  IMPORTANT: Firebase Configuration
+  ============================================================================
+  
+  1. Create a Firebase Project:
+     - Go to https://console.firebase.google.com
+     - Click "Add Project"
+     - Enter your project name and continue
+  
+  2. Get Your Config:
+     - Go to Project Settings
+     - Under "Your apps" section, select Web app
+     - Copy the config object
+     - Replace YOUR_* values in firebase-config.js
+  
+  3. Get VAPID Key:
+     - Go to Project Settings
+     - Click "Cloud Messaging" tab
+     - Under "Web push certificates", click "Generate Key Pair"
+     - Copy the public key
+     - Replace YOUR_VAPID_PUBLIC_KEY in notifications-fcm.js
+  
+  4. Enable Firebase Services:
+     - In Firebase Console, enable:
+       * Authentication (Email/Password)
+       * Firestore Database
+       * Cloud Messaging
+       * Cloud Functions
+  
+  5. Deploy Cloud Functions:
+     - Install Firebase CLI: npm install -g firebase-tools
+     - Run: firebase login
+     - Run: firebase deploy --only functions
+  
+  ============================================================================
+  Firestore Security Rules (for reference)
+  ============================================================================
+  
+  rules_version = '2';
+  service cloud.firestore {
+    match /databases/{database}/documents {
+      
+      // FCM Tokens - users can only read/write their own
+      match /users/{userId}/fcmTokens/{document=**} {
+        allow read, write: if request.auth.uid == userId;
+      }
+      
+      // Global FCM Token Index - read only for token lookup
+      match /fcmTokenIndex/{token} {
+        allow read: if request.auth != null;
+        allow write: if false; // Only Cloud Functions can write
+      }
+      
+      // Notification logs - only Cloud Functions can write
+      match /notificationLogs/{document=**} {
+        allow read: if request.auth != null;
+        allow write: if false;
+      }
+      
+      // User data - basic structure
+      match /users/{userId} {
+        allow read: if request.auth.uid == userId;
+        allow write: if request.auth.uid == userId;
+      }
+    }
+  }
+  
+  ============================================================================
+  Testing Push Notifications
+  ============================================================================
+  
+  Method 1: Firebase Console
+  - Go to Cloud Messaging tab in Firebase Console
+  - Click "Send your first message"
+  - Enter title, body, and target (by topic or token)
+  - Click "Send"
+  
+  Method 2: Cloud Function
+  - Call the sendNotification Cloud Function:
+    
+    firebase.functions().httpsCallable('sendNotification')({
+      userId: 'user-id',
+      title: 'Test',
+      body: 'This is a test notification',
+      icon: '/icon-192x192.png'
+    }).then(result => console.log(result))
+  
+  Method 3: Send from another Cloud Function
+  - Use admin.messaging().send() to send notifications
+  
+  ============================================================================
+  Analytics & Logging
+  ============================================================================
+  
+  All notifications are logged in Firestore under /notificationLogs
+  - Contains user ID, title, body, sent time, and token count
+  - Useful for understanding notification delivery and user engagement
+  
+  ============================================================================
+-->

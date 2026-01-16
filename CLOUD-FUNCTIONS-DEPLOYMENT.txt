@@ -1,0 +1,206 @@
+================================================================================
+CLOUD FUNCTIONS DEPLOYMENT GUIDE FOR SUBTRA PWA
+================================================================================
+
+Your notification system includes Cloud Functions for sending push notifications.
+Follow these steps to deploy them to Firebase.
+
+================================================================================
+STEP 1: INSTALL FIREBASE CLI (if not already installed)
+================================================================================
+
+Run this command in your terminal:
+  npm install -g firebase-tools
+
+Verify installation:
+  firebase --version
+
+================================================================================
+STEP 2: LOGIN TO FIREBASE
+================================================================================
+
+Run this command and follow the prompts:
+  firebase login
+
+This will open a browser window asking you to sign in with your Google account.
+Make sure to use the same Google account that owns your Firebase project.
+
+================================================================================
+STEP 3: INITIALIZE FIREBASE IN YOUR PROJECT (if needed)
+================================================================================
+
+If you haven't already initialized Firebase in your project directory:
+  firebase init
+
+Select these options:
+✓ Firestore
+✓ Functions
+✓ Hosting (optional)
+
+When prompted for project, select: "subtra-da8c1"
+
+================================================================================
+STEP 4: VERIFY YOUR FUNCTIONS DIRECTORY
+================================================================================
+
+Make sure your functions folder has:
+  /functions
+    ├── index.js (main entry point - should export notification functions)
+    ├── sendNotification.js (notification functions)
+    ├── package.json (dependencies)
+    ├── node_modules/ (dependencies folder)
+    └── .gitignore
+
+If node_modules doesn't exist, run:
+  cd functions
+  npm install
+  cd ..
+
+================================================================================
+STEP 5: VERIFY EXPORTS IN functions/index.js
+================================================================================
+
+Make sure your functions/index.js has these exports:
+
+// At the top of the file, import sendNotification:
+const notificationFunctions = require("./sendNotification");
+
+// Export the notification functions:
+exports.sendNotification = notificationFunctions.sendNotification;
+exports.sendNotificationToTopic = notificationFunctions.sendNotificationToTopic;
+exports.subscribeToTopic = notificationFunctions.subscribeToTopic;
+exports.unsubscribeFromTopic = notificationFunctions.unsubscribeFromTopic;
+
+These exports are REQUIRED for the functions to be accessible from your app.
+
+================================================================================
+STEP 6: DEPLOY CLOUD FUNCTIONS
+================================================================================
+
+From your project root directory (where firebase.json is), run:
+
+To deploy only functions:
+  firebase deploy --only functions
+
+To deploy everything:
+  firebase deploy
+
+The first deployment may take 2-5 minutes. You'll see output like:
+  ✔ Deploy complete!
+  
+  Function URL: https://us-central1-subtra-da8c1.cloudfunctions.net/functionName
+
+Save these URLs - you'll use them in your app to call the functions.
+
+================================================================================
+STEP 7: TEST YOUR DEPLOYMENT
+================================================================================
+
+After deployment, you can test the functions in Firebase Console:
+
+1. Go to Firebase Console → Functions
+2. You should see your functions listed:
+   ✓ sendNotification
+   ✓ sendNotificationToTopic
+   ✓ subscribeToTopic
+   ✓ unsubscribeFromTopic
+
+3. Click on each function to see:
+   - Execution logs
+   - Memory usage
+   - Execution time
+   - Error messages (if any)
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Problem: "Error: Cannot find module 'firebase-admin'"
+Solution: 
+  cd functions
+  npm install firebase-admin
+  cd ..
+
+Problem: "Error: Missing 'sendNotification.js'"
+Solution: 
+  Make sure sendNotification.js exists in the functions/ folder
+  If missing, recreate it from your backups
+
+Problem: "Error: Could not find firebase.json"
+Solution:
+  Make sure you're in the correct directory (the root of your Subtra project)
+  Create firebase.json if missing
+
+Problem: "Functions deployed but not callable from app"
+Solution:
+  1. Check that functions are exported in functions/index.js
+  2. Verify Firestore security rules allow Cloud Functions to write
+  3. Check browser console for errors
+  4. Verify you're passing correct function names when calling
+
+Problem: "Rate limited or quota exceeded"
+Solution:
+  Firebase has free tier limits. Check your usage:
+  Firebase Console → Functions → Dashboard
+  Consider upgrading your plan if needed
+
+================================================================================
+ENVIRONMENT VARIABLES (Optional)
+================================================================================
+
+If you need to use environment variables (like email credentials):
+
+1. Set them in Firebase:
+  firebase functions:config:set app.email_user="your-email@gmail.com"
+  firebase functions:config:set app.email_password="your-app-password"
+
+2. Access in functions:
+  const config = functions.config();
+  const email = config.app.email_user;
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+Once deployed:
+
+1. ✓ Firestore Security Rules (see FIRESTORE-SECURITY-RULES.txt)
+2. ✓ Cloud Functions (you're doing this now!)
+3. → Verify dashboard has notification button (already added)
+4. → Test in your browser:
+   - Click "Enable Notifications" button
+   - Grant permission when prompted
+   - Check browser console for success messages
+   - Send a test notification from Cloud Functions
+
+5. → To send test notifications:
+   Use the notification utilities in your app:
+   
+   // From browser console:
+   fcm.sendTestNotification("Test Title", "Test message from Subtra");
+   
+   Or use the Cloud Functions UI in Firebase Console
+
+================================================================================
+IMPORTANT NOTES
+================================================================================
+
+• Functions are billable after the free tier (typically $0.40 per million invocations)
+• Cold starts may take 1-2 seconds on first deployment
+• Functions automatically scale, but you can set limits in firebaserc
+• Keep sendNotification.js and index.js in sync
+• Test functions in emulator before production:
+  firebase emulators:start
+
+================================================================================
+GETTING HELP
+================================================================================
+
+If you encounter issues:
+1. Check Cloud Functions logs: firebase functions:log
+2. Check Firestore rules: Firebase Console → Firestore → Rules
+3. Check browser console (F12 → Console tab)
+4. Verify FCM token is being saved to Firestore
+5. Review the notification utils for error messages
+
+================================================================================

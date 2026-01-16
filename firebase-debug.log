@@ -96,3 +96,223 @@ You're about to initialize a Firebase project in this directory:
     at process.processTimers (node:internal/timers:543:7)
 [error] 
 [error] Error: An unexpected error has occurred.
+[debug] [2026-01-16T21:34:02.819Z] ----------------------------------------------------------------------
+[debug] [2026-01-16T21:34:02.862Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2026-01-16T21:34:02.863Z] CLI Version:   15.2.0
+[debug] [2026-01-16T21:34:02.864Z] Platform:      win32
+[debug] [2026-01-16T21:34:02.864Z] Node Version:  v24.11.0
+[debug] [2026-01-16T21:34:02.865Z] Time:          Fri Jan 16 2026 13:34:02 GMT-0800 (Pacific Standard Time)
+[debug] [2026-01-16T21:34:02.865Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-16T21:34:02.872Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\User\Desktop\PROJECTS\Subtra
+
+[debug] [2026-01-16T21:35:05.090Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-01-16T21:35:05.090Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-01-16T21:36:42.624Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-16T21:36:42.624Z] > authorizing via signed-in user (obaloluwaajayi2006@gmail.com)
+[debug] [2026-01-16T21:36:42.626Z] Checked if tokens are valid: false, expires at: 1767713972773
+[debug] [2026-01-16T21:36:42.626Z] Checked if tokens are valid: false, expires at: 1767713972773
+[debug] [2026-01-16T21:36:42.627Z] > refreshing access token with scopes: []
+[debug] [2026-01-16T21:36:42.673Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-01-16T21:36:42.674Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-01-16T21:36:43.598Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-01-16T21:36:43.599Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-01-16T21:36:43.861Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 [none]
+[debug] [2026-01-16T21:36:44.559Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 200
+[debug] [2026-01-16T21:36:44.560Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 {"projectId":"subtra-da8c1","projectNumber":"795601435114","displayName":"Subtra","name":"projects/subtra-da8c1","resources":{"hostingSite":"subtra-da8c1"},"state":"ACTIVE","etag":"1_f621b688-8724-4cc1-aeec-d559142e533f"}
+[info] i  Using project subtra-da8c1 (Subtra) . 
+[info] 
+=== Hosting Setup
+[debug] [2026-01-16T21:36:44.850Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:36:44.851Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:36:44.851Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 [none]
+[debug] [2026-01-16T21:36:45.209Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 200
+[debug] [2026-01-16T21:36:45.209Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 {"projectId":"subtra-da8c1","projectNumber":"795601435114","displayName":"Subtra","name":"projects/subtra-da8c1","resources":{"hostingSite":"subtra-da8c1"},"state":"ACTIVE","etag":"1_f621b688-8724-4cc1-aeec-d559142e533f"}
+[info] 
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
+[info] 
+[debug] [2026-01-16T21:36:58.115Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (file:///C:/Users/User/AppData/Roaming/npm/node_modules/firebase-tools/node_modules/@inquirer/core/dist/lib/create-prompt.js:62:37)
+    at Interface.emit (node:events:508:28)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1317:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:284:20)
+    at ReadStream.emit (node:events:520:35)
+    at emitKeys (node:internal/readline/utils:371:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+    at ReadStream.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:559:12)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2026-01-16T21:37:17.270Z] ----------------------------------------------------------------------
+[debug] [2026-01-16T21:37:17.275Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2026-01-16T21:37:17.277Z] CLI Version:   15.2.0
+[debug] [2026-01-16T21:37:17.278Z] Platform:      win32
+[debug] [2026-01-16T21:37:17.279Z] Node Version:  v24.11.0
+[debug] [2026-01-16T21:37:17.279Z] Time:          Fri Jan 16 2026 13:37:17 GMT-0800 (Pacific Standard Time)
+[debug] [2026-01-16T21:37:17.280Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\User\Desktop\PROJECTS\Subtra
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-01-16T21:38:50.246Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-16T21:38:50.248Z] > authorizing via signed-in user (obaloluwaajayi2006@gmail.com)
+[debug] [2026-01-16T21:38:50.251Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:38:50.252Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:38:50.255Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 [none]
+[debug] [2026-01-16T21:38:51.642Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 200
+[debug] [2026-01-16T21:38:51.643Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 {"projectId":"subtra-da8c1","projectNumber":"795601435114","displayName":"Subtra","name":"projects/subtra-da8c1","resources":{"hostingSite":"subtra-da8c1"},"state":"ACTIVE","etag":"1_f621b688-8724-4cc1-aeec-d559142e533f"}
+[info] i  Using project subtra-da8c1 (Subtra) . 
+[info] 
+=== Firestore Setup
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-01-16T21:38:51.737Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:38:51.737Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:38:51.738Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/subtra-da8c1/services/firestore.googleapis.com [none]
+[debug] [2026-01-16T21:38:51.739Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/subtra-da8c1/services/firestore.googleapis.com x-goog-quota-user=projects/subtra-da8c1
+[debug] [2026-01-16T21:38:53.352Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/subtra-da8c1/services/firestore.googleapis.com 200
+[debug] [2026-01-16T21:38:53.353Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/subtra-da8c1/services/firestore.googleapis.com [omitted]
+[info] +  firestore: required API firestore.googleapis.com is enabled 
+[debug] [2026-01-16T21:38:53.460Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:38:53.460Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:38:53.461Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases [none]
+[debug] [2026-01-16T21:38:54.338Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases 200
+[debug] [2026-01-16T21:38:54.338Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases {"databases":[{"name":"projects/subtra-da8c1/databases/(default)","uid":"79b0ec2d-8731-4629-aead-9fbcdf92516b","createTime":"2026-01-04T14:59:05.498833Z","updateTime":"2026-01-04T14:59:05.498833Z","locationId":"nam5","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-01-16T11:36:11.136703Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"s","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IPzWvLCJkJIDMIfK65nE8pED"}]}
+[info] 
+[info] Firestore Security Rules allow you to define how and when to allow
+[info] requests. You can keep these rules in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2026-01-16T21:39:12.281Z] ----------------------------------------------------------------------
+[debug] [2026-01-16T21:39:12.290Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\User\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2026-01-16T21:39:12.290Z] CLI Version:   15.2.0
+[debug] [2026-01-16T21:39:12.291Z] Platform:      win32
+[debug] [2026-01-16T21:39:12.291Z] Node Version:  v24.11.0
+[debug] [2026-01-16T21:39:12.291Z] Time:          Fri Jan 16 2026 13:39:12 GMT-0800 (Pacific Standard Time)
+[debug] [2026-01-16T21:39:12.291Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\User\Desktop\PROJECTS\Subtra
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2026-01-16T21:41:29.085Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-16T21:41:29.086Z] > authorizing via signed-in user (obaloluwaajayi2006@gmail.com)
+[debug] [2026-01-16T21:41:29.088Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:29.089Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:29.115Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 [none]
+[debug] [2026-01-16T21:41:32.326Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 200
+[debug] [2026-01-16T21:41:32.327Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/subtra-da8c1 {"projectId":"subtra-da8c1","projectNumber":"795601435114","displayName":"Subtra","name":"projects/subtra-da8c1","resources":{"hostingSite":"subtra-da8c1"},"state":"ACTIVE","etag":"1_f621b688-8724-4cc1-aeec-d559142e533f"}
+[info] i  Using project subtra-da8c1 (Subtra) . 
+[info] 
+=== Firestore Setup
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-01-16T21:41:32.462Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:32.462Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:32.463Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases [none]
+[debug] [2026-01-16T21:41:33.373Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases 200
+[debug] [2026-01-16T21:41:33.373Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases {"databases":[{"name":"projects/subtra-da8c1/databases/(default)","uid":"79b0ec2d-8731-4629-aead-9fbcdf92516b","createTime":"2026-01-04T14:59:05.498833Z","updateTime":"2026-01-04T14:59:05.498833Z","locationId":"nam5","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-01-16T11:38:50.179173Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"s","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"ILeTqPyJkJIDMIfK65nE8pED"}]}
+[info] 
+[info] Firestore Security Rules allow you to define how and when to allow
+[info] requests. You can keep these rules in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2026-01-16T21:41:42.189Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:42.189Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:42.206Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/subtra-da8c1/releases pageSize=10&pageToken=
+[debug] [2026-01-16T21:41:43.408Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/subtra-da8c1/releases 200
+[debug] [2026-01-16T21:41:43.408Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/subtra-da8c1/releases {"releases":[{"name":"projects/subtra-da8c1/releases/cloud.firestore","rulesetName":"projects/subtra-da8c1/rulesets/7ffe1eeb-7ba6-40dd-bbd0-cfc90a0250b5","createTime":"2026-01-04T14:59:12.529771Z","updateTime":"2026-01-16T12:21:47.326239Z"}]}
+[debug] [2026-01-16T21:41:43.409Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:43.409Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:43.409Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/subtra-da8c1/rulesets/7ffe1eeb-7ba6-40dd-bbd0-cfc90a0250b5 [none]
+[debug] [2026-01-16T21:41:43.819Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/subtra-da8c1/rulesets/7ffe1eeb-7ba6-40dd-bbd0-cfc90a0250b5 200
+[debug] [2026-01-16T21:41:43.819Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/subtra-da8c1/rulesets/7ffe1eeb-7ba6-40dd-bbd0-cfc90a0250b5 [omitted]
+[info] i  Downloaded the existing Firestore Security Rules from the Firebase console 
+[info] 
+[info] Firestore indexes allow you to perform complex queries while
+[info] maintaining performance that scales with the size of the result
+[info] set. You can keep index definitions in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2026-01-16T21:41:49.150Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:49.151Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:49.151Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:49.151Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:49.182Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2026-01-16T21:41:49.199Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2026-01-16T21:41:50.380Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2026-01-16T21:41:50.381Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2026-01-16T21:41:51.295Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 200
+[debug] [2026-01-16T21:41:51.295Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/subtra-da8c1/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* {"fields":[{"name":"projects/subtra-da8c1/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[info] i  Downloaded the existing Firestore indexes from the Firebase console 
+[info] +  Wrote firestore.rules 
+[info] +  Wrote firestore.indexes.json 
+[info] 
+=== Functions Setup
+[debug] [2026-01-16T21:41:51.376Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-16T21:41:51.377Z] > authorizing via signed-in user (obaloluwaajayi2006@gmail.com)
+[debug] [2026-01-16T21:41:51.377Z] [iam] checking project subtra-da8c1 for permissions ["firebase.projects.get"]
+[debug] [2026-01-16T21:41:51.377Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:51.378Z] Checked if tokens are valid: true, expires at: 1768603002599
+[debug] [2026-01-16T21:41:51.378Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/subtra-da8c1:testIamPermissions [none]
+[debug] [2026-01-16T21:41:51.378Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/subtra-da8c1:testIamPermissions x-goog-quota-user=projects/subtra-da8c1
+[debug] [2026-01-16T21:41:51.378Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/subtra-da8c1:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2026-01-16T21:41:53.098Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/subtra-da8c1:testIamPermissions 200
+[debug] [2026-01-16T21:41:53.098Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/subtra-da8c1:testIamPermissions {"permissions":["firebase.projects.get"]}
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[info] +  Wrote functions/package.json 
+[info] i  functions/.eslintrc.js is unchanged 
+[info] +  Wrote functions/index.js 
+[info] i  functions/.gitignore is unchanged 
