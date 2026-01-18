@@ -107,6 +107,8 @@ These are your next steps in order. Estimated total time: 30 minutes
    Done when: Token appears in Firestore database
 
 4️⃣  SEND TEST NOTIFICATION (5 min)
+
+
    ───────────────────────────
    What: Confirm you can send and receive notifications
    
